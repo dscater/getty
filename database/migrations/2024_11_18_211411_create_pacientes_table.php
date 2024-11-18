@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string("ci", 155)->nullable();
             $table->string("ci_exp", 155)->nullable();
             $table->date("fecha_nac")->nullable();
-            $table->integer("edad")->nullable();
             $table->string("dir", 350);
             $table->string("fono", 155)->nullable();
             $table->string("foto")->nullable();

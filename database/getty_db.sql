@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 18-11-2024 a las 21:32:36
+-- Tiempo de generación: 18-11-2024 a las 23:42:06
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.2.22
 
@@ -170,7 +170,12 @@ CREATE TABLE `historial_accions` (
 --
 
 INSERT INTO `historial_accions` (`id`, `user_id`, `accion`, `descripcion`, `datos_original`, `datos_nuevo`, `modulo`, `fecha`, `hora`, `created_at`, `updated_at`) VALUES
-(1, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN USUARIO', 'id: 2<br/>usuario: JPERES<br/>nombre: JUAN<br/>paterno: PERES<br/>materno: MAMANI<br/>ci: 1111<br/>ci_exp: LP<br/>dir: ZONA LOS OLIVOS<br/>email: JUAN@GMAIL.COM<br/>fono: 7777777<br/>password: $2y$12$ZEclJTz5qo7TFBFtp8ehwuaIDE.g0VYqOlLl4aJSFvNoCL0JFYS7O<br/>tipo: DOCTOR GENERAL<br/>foto: 1731963984_JPERES.jpg<br/>fecha_registro: 2024-11-18<br/>acceso: 1<br/>created_at: 2024-11-18 21:06:24<br/>updated_at: 2024-11-18 21:06:24<br/>', NULL, 'USUARIOS', '2024-11-18', '21:06:24', '2024-11-19 01:06:24', '2024-11-19 01:06:24');
+(1, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN USUARIO', 'id: 2<br/>usuario: JPERES<br/>nombre: JUAN<br/>paterno: PERES<br/>materno: MAMANI<br/>ci: 1111<br/>ci_exp: LP<br/>dir: ZONA LOS OLIVOS<br/>email: JUAN@GMAIL.COM<br/>fono: 7777777<br/>password: $2y$12$ZEclJTz5qo7TFBFtp8ehwuaIDE.g0VYqOlLl4aJSFvNoCL0JFYS7O<br/>tipo: DOCTOR GENERAL<br/>foto: 1731963984_JPERES.jpg<br/>fecha_registro: 2024-11-18<br/>acceso: 1<br/>created_at: 2024-11-18 21:06:24<br/>updated_at: 2024-11-18 21:06:24<br/>', NULL, 'USUARIOS', '2024-11-18', '21:06:24', '2024-11-19 01:06:24', '2024-11-19 01:06:24'),
+(2, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN PACIENTE', 'id: 1<br/>usuario: <br/>nombre: RAMIRO<br/>paterno: MAMANI<br/>materno: MAMANI<br/>ci: 123456<br/>ci_exp: LP<br/>dir: <br/>email: <br/>fono: 676767676<br/>password: <br/>tipo: <br/>foto: 1731972418_.jpg<br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:26:58<br/>updated_at: 2024-11-18 23:26:58<br/>', NULL, 'PACIENTES', '2024-11-18', '23:26:58', '2024-11-19 03:26:58', '2024-11-19 03:26:58'),
+(3, 1, 'MODIFICACIÓN', 'EL USUARIO admin MODIFICÓ UN PACIENTE', 'id: 1<br/>usuario: <br/>nombre: RAMIRO<br/>paterno: MAMANI<br/>materno: MAMANI<br/>ci: 123456<br/>ci_exp: LP<br/>dir: <br/>email: <br/>fono: 676767676<br/>password: <br/>tipo: <br/>foto: 1731972418_.jpg<br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:26:58<br/>updated_at: 2024-11-18 23:26:58<br/>', 'id: 1<br/>usuario: <br/>nombre: RAMIRO<br/>paterno: MAMANI<br/>materno: MAMANI<br/>ci: 123456<br/>ci_exp: LP<br/>dir: ZONA LOS OLIVOS<br/>email: <br/>fono: 676767676<br/>password: <br/>tipo: <br/>foto: 1731972418_.jpg<br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:26:58<br/>updated_at: 2024-11-18 23:28:29<br/>', 'PACIENTES', '2024-11-18', '23:28:29', '2024-11-19 03:28:29', '2024-11-19 03:28:29'),
+(4, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: ZONA LOS PEDREGALES<br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:28:59<br/>updated_at: 2024-11-18 23:28:59<br/>', NULL, 'PACIENTES', '2024-11-18', '23:28:59', '2024-11-19 03:28:59', '2024-11-19 03:28:59'),
+(5, 1, 'ELIMINACIÓN', 'EL USUARIO admin ELIMINÓ UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: ZONA LOS PEDREGALES<br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:28:59<br/>updated_at: 2024-11-18 23:28:59<br/>', NULL, 'PACIENTES', '2024-11-18', '23:29:37', '2024-11-19 03:29:37', '2024-11-19 03:29:37'),
+(6, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: <br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:30:02<br/>updated_at: 2024-11-18 23:30:02<br/>', NULL, 'PACIENTES', '2024-11-18', '23:30:02', '2024-11-19 03:30:02', '2024-11-19 03:30:02');
 
 -- --------------------------------------------------------
 
@@ -212,7 +217,6 @@ CREATE TABLE `pacientes` (
   `ci` varchar(155) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ci_exp` varchar(155) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fecha_nac` date DEFAULT NULL,
-  `edad` int DEFAULT NULL,
   `dir` varchar(350) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fono` varchar(155) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `foto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -230,6 +234,14 @@ CREATE TABLE `pacientes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `pacientes`
+--
+
+INSERT INTO `pacientes` (`id`, `nombre`, `paterno`, `materno`, `ci`, `ci_exp`, `fecha_nac`, `dir`, `fono`, `foto`, `nombre_proge`, `senior`, `dir_s`, `fono_dom_s`, `fono_trab_s`, `cel_s`, `fax_s`, `correo_s`, `agradecer`, `nom_edad_hmnos`, `fecha_registro`, `created_at`, `updated_at`) VALUES
+(1, 'RAMIRO', 'MAMANI', 'MAMANI', '123456', 'LP', '2000-01-01', 'ZONA LOS OLIVOS', '676767676', '1731972418_.jpg', '', 'RAMIRO MAMANI', 'ZONA LOS PEDREGALES', '222277', '277777', '766666666', 'FAX', 'RAMIRO@GMAIL.COM', 'JUAN PERES', 'PEDRO MAMANI 20, CARLOS MAMANI 15', NULL, '2024-11-19 03:26:58', '2024-11-19 03:28:29'),
+(2, 'MARIA', 'GONZALES', '', '', '', '2014-01-01', '', '', NULL, 'JUAN GONZALES', '', '', '', '', '', '', '', '', '', NULL, '2024-11-19 03:30:02', '2024-11-19 03:30:02');
 
 -- --------------------------------------------------------
 
@@ -369,7 +381,7 @@ ALTER TABLE `examen_imagens`
 -- AUTO_INCREMENT de la tabla `historial_accions`
 --
 ALTER TABLE `historial_accions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -381,7 +393,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `pacientes`
 --
 ALTER TABLE `pacientes`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

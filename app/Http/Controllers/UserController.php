@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lote;
+use App\Models\Paciente;
 use App\Models\User;
 use App\Models\VentaLote;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,11 @@ class UserController extends Controller
             "usuarios.create",
             "usuarios.edit",
             "usuarios.destroy",
+
+            "pacientes.index",
+            "pacientes.create",
+            "pacientes.edit",
+            "pacientes.destroy",
 
             "configuracions.index",
             "configuracions.create",
@@ -74,29 +80,16 @@ class UserController extends Controller
             ];
         }
 
-        $array_infos[] = [
-            'label' => 'CONTRATOS',
-            'cantidad' => 0,
-            'color' => 'bg-principal',
-            'icon' => "fa-clipboard-list",
-            "url" => ""
-        ];
-
-        $array_infos[] = [
-            'label' => 'PRODUCTOS',
-            'cantidad' => 0,
-            'color' => 'bg-principal',
-            'icon' => "fa-box",
-            "url" => ""
-        ];
-
-        $array_infos[] = [
-            'label' => 'VEHÍCULOS',
-            'cantidad' => 0,
-            'color' => 'bg-principal',
-            'icon' => "fa-truck",
-            "url" => ""
-        ];
+        if (in_array('pacientes.index', self::$permisos[$tipo])) {
+            $pacientes = Paciente::count();
+            $array_infos[] = [
+                'label' => 'PACIENTES',
+                'cantidad' => $pacientes,
+                'color' => 'bg-principal',
+                'icon' => "fa-users",
+                "url" => "pacientes.index"
+            ];
+        }
 
         return $array_infos;
     }

@@ -141,9 +141,20 @@ onMounted(() => {
 
 <style scoped>
 .contenedor_login {
+    background-color: rgb(0, 0, 0) !important;
     justify-content: center;
     width: 100%;
     height: 100%;
+}
+
+.login-body {
+    background-color: black;
+}
+
+.login-container {
+    background-color: #0077ffb6 !important;
+    padding: 10px 20px !important;
+    border-radius: 10px;
 }
 
 .logo_login {
@@ -151,6 +162,6 @@ onMounted(() => {
 }
 
 .login-cover .login-cover-bg {
-    background: var(--principal);
+    background-image: url("/imgs/bglogindark.png");
 }
 </style>
