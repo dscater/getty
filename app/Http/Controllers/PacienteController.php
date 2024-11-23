@@ -44,42 +44,42 @@ class PacienteController extends Controller
 
     public function listado()
     {
-        $usuarios = Paciente::select("pacientes.*")->get();
+        $pacientes = Paciente::select("pacientes.*")->get();
         return response()->JSON([
-            "usuarios" => $usuarios
+            "pacientes" => $pacientes
         ]);
     }
 
     public function api(Request $request)
     {
         // Log::debug($request);
-        $usuarios = Paciente::select("pacientes.*");
-        $usuarios = $usuarios->get();
-        return response()->JSON(["data" => $usuarios]);
+        $pacientes = Paciente::select("pacientes.*");
+        $pacientes = $pacientes->get();
+        return response()->JSON(["data" => $pacientes]);
     }
 
     public function paginado(Request $request)
     {
         $search = $request->search;
-        $usuarios = Paciente::select("pacientes.*");
+        $pacientes = Paciente::select("pacientes.*");
 
         if (trim($search) != "") {
-            $usuarios->where("nombre", "LIKE", "%$search%");
-            $usuarios->orWhere("paterno", "LIKE", "%$search%");
-            $usuarios->orWhere("materno", "LIKE", "%$search%");
-            $usuarios->orWhere("ci", "LIKE", "%$search%");
+            $pacientes->where("nombre", "LIKE", "%$search%");
+            $pacientes->orWhere("paterno", "LIKE", "%$search%");
+            $pacientes->orWhere("materno", "LIKE", "%$search%");
+            $pacientes->orWhere("ci", "LIKE", "%$search%");
         }
 
-        $usuarios = $usuarios->paginate($request->itemsPerPage);
+        $pacientes = $pacientes->paginate($request->itemsPerPage);
         return response()->JSON([
-            "usuarios" => $usuarios
+            "pacientes" => $pacientes
         ]);
     }
 
     public function store(Request $request)
     {
         if (isset($request["ci"]) && trim($request["ci"] != '')) {
-            $this->validacion['ci'] = 'required|min:4|numeric|unique:users,ci';
+            $this->validacion['ci'] = 'required|min:4|numeric|unique:pacientes,ci';
         }
         if ($request->hasFile('foto')) {
             $this->validacion['foto'] = 'image|mimes:jpeg,jpg,png|max:4096';
@@ -88,18 +88,18 @@ class PacienteController extends Controller
 
         DB::beginTransaction();
         try {
-            // crear el Usuario
-            $nuevo_usuario = Paciente::create(array_map('mb_strtoupper', $request->except('foto')));
-            $nuevo_usuario->save();
+            // crear el Paciente
+            $nuevo_paciente = Paciente::create(array_map('mb_strtoupper', $request->except('foto')));
+            $nuevo_paciente->save();
             if ($request->hasFile('foto')) {
                 $file = $request->foto;
-                $nom_foto = time() . '_' . $nuevo_usuario->usuario . '.' . $file->getClientOriginalExtension();
-                $nuevo_usuario->foto = $nom_foto;
-                $file->move(public_path() . '/imgs/users/', $nom_foto);
+                $nom_foto = time() . $nuevo_paciente->id . '.' . $file->getClientOriginalExtension();
+                $nuevo_paciente->foto = $nom_foto;
+                $file->move(public_path() . '/imgs/pacientes/', $nom_foto);
             }
-            $nuevo_usuario->save();
+            $nuevo_paciente->save();
 
-            $datos_original = HistorialAccion::getDetalleRegistro($nuevo_usuario, "users");
+            $datos_original = HistorialAccion::getDetalleRegistro($nuevo_paciente, "pacientes");
             HistorialAccion::create([
                 'user_id' => Auth::user()->id,
                 'accion' => 'CREACIÓN',
@@ -127,28 +127,28 @@ class PacienteController extends Controller
 
     public function update(Paciente $paciente, Request $request)
     {
-        $this->validacion['ci'] = 'required|min:4|numeric|unique:users,ci,' . $paciente->id;
+        $this->validacion['ci'] = 'required|min:4|numeric|unique:pacientes,ci,' . $paciente->id;
         if ($request->hasFile('foto')) {
             $this->validacion['foto'] = 'image|mimes:jpeg,jpg,png|max:4096';
         }
         $request->validate($this->validacion, $this->mensajes);
         DB::beginTransaction();
         try {
-            $datos_original = HistorialAccion::getDetalleRegistro($paciente, "users");
+            $datos_original = HistorialAccion::getDetalleRegistro($paciente, "pacientes");
             $paciente->update(array_map('mb_strtoupper', $request->except('foto')));
             if ($request->hasFile('foto')) {
                 $antiguo = $paciente->foto;
                 if ($antiguo != 'default.png') {
-                    \File::delete(public_path() . '/imgs/users/' . $antiguo);
+                    \File::delete(public_path() . '/imgs/pacientes/' . $antiguo);
                 }
                 $file = $request->foto;
-                $nom_foto = time() . '_' . $paciente->usuario . '.' . $file->getClientOriginalExtension();
+                $nom_foto = time() . $paciente->id . '.' . $file->getClientOriginalExtension();
                 $paciente->foto = $nom_foto;
-                $file->move(public_path() . '/imgs/users/', $nom_foto);
+                $file->move(public_path() . '/imgs/pacientes/', $nom_foto);
             }
             $paciente->save();
 
-            $datos_nuevo = HistorialAccion::getDetalleRegistro($paciente, "users");
+            $datos_nuevo = HistorialAccion::getDetalleRegistro($paciente, "pacientes");
             HistorialAccion::create([
                 'user_id' => Auth::user()->id,
                 'accion' => 'MODIFICACIÓN',
@@ -190,9 +190,9 @@ class PacienteController extends Controller
 
             $antiguo = $paciente->foto;
             if ($antiguo != 'default.png') {
-                \File::delete(public_path() . '/imgs/users/' . $antiguo);
+                \File::delete(public_path() . '/imgs/pacientes/' . $antiguo);
             }
-            $datos_original = HistorialAccion::getDetalleRegistro($paciente, "users");
+            $datos_original = HistorialAccion::getDetalleRegistro($paciente, "pacientes");
             $paciente->delete();
             HistorialAccion::create([
                 'user_id' => Auth::user()->id,

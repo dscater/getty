@@ -68,8 +68,8 @@ function cargaArchivo(e, key) {
 
 const tituloDialog = computed(() => {
     return accion.value == 0
-        ? `<i class="fa fa-plus"></i>Agregar Registro`
-        : `<i class="fa fa-edit"></i>Editar Registro`;
+        ? `<i class="fa fa-plus"></i> Agregar Registro`
+        : `<i class="fa fa-edit"></i> Editar Registro`;
 });
 
 const initializeSwitcher = () => {

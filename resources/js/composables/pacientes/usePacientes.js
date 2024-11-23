@@ -156,7 +156,7 @@ export const usePacientes = () => {
         }
     };
 
-    const setPaciente = (item = null) => {
+    const setPaciente = (item = null, foto = false) => {
         if (item) {
             oPaciente.value.id = item.id;
             oPaciente.value.nombre = item.nombre;
@@ -178,6 +178,9 @@ export const usePacientes = () => {
             oPaciente.value.correo_s = item.correo_s;
             oPaciente.value.agradecer = item.agradecer;
             oPaciente.value.nom_edad_hmnos = item.nom_edad_hmnos;
+            if (foto) {
+                oPaciente.value.url_foto = item.url_foto;
+            }
             oPaciente.value._method = "PUT";
             return oPaciente;
         }

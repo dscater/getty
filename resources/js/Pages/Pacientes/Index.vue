@@ -21,9 +21,8 @@ import { usePacientes } from "@/composables/pacientes/usePacientes";
 import { initDataTable } from "@/composables/datatable.js";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import PanelToolbar from "@/Components/PanelToolbar.vue";
-// import { useMenu } from "@/composables/useMenu";
 import Formulario from "./Formulario.vue";
-// const { mobile, identificaDispositivo } = useMenu();
+import Detalle from "./Detalle.vue";
 const { setLoading } = useApp();
 onMounted(() => {
     setTimeout(() => {
@@ -67,6 +66,9 @@ const columns = [
         data: null,
         render: function (data, type, row) {
             return `
+                <button class="mx-0 rounded-0 btn btn-primary detalle" data-id="${
+                    row.id
+                }"><i class="fa fa-id-card"></i></button>
                 <button class="mx-0 rounded-0 btn btn-warning editar" data-id="${
                     row.id
                 }"><i class="fa fa-edit"></i></button>
@@ -84,6 +86,8 @@ const columns = [
 const loading = ref(false);
 const accion_dialog = ref(0);
 const open_dialog = ref(false);
+const accion_dialog_det = ref(0);
+const open_dialog_det = ref(false);
 
 const agregarRegistro = () => {
     limpiarPaciente();
@@ -92,6 +96,16 @@ const agregarRegistro = () => {
 };
 
 const accionesRow = () => {
+    // detalle
+    $("#table-paciente").on("click", "button.detalle", function (e) {
+        e.preventDefault();
+        let id = $(this).attr("data-id");
+        axios.get(route("pacientes.show", id)).then((response) => {
+            setPaciente(response.data, true);
+            accion_dialog_det.value = 1;
+            open_dialog_det.value = true;
+        });
+    });
     // editar
     $("#table-paciente").on("click", "button.editar", function (e) {
         e.preventDefault();
@@ -218,4 +232,11 @@ onBeforeUnmount(() => {
         @envio-formulario="updateDatatable"
         @cerrar-dialog="open_dialog = false"
     ></Formulario>
+
+    <Detalle
+        :open_dialog="open_dialog_det"
+        :accion_dialog="accion_dialog_det"
+        @envio-formulario="updateDatatable"
+        @cerrar-dialog="open_dialog_det = false"
+    ></Detalle>
 </template>

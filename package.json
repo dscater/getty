@@ -26,6 +26,7 @@
         "highcharts": "^11.4.8",
         "pinia": "^2.1.7",
         "sweetalert2": "^11.10.4",
+        "three": "^0.170.0",
         "vue-awesome-paginate": "^1.1.46"
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 18-11-2024 a las 23:42:06
+-- Tiempo de generación: 23-11-2024 a las 21:07:11
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.2.22
 
@@ -103,6 +103,7 @@ CREATE TABLE `consultas` (
 CREATE TABLE `examen_clinicos` (
   `id` bigint UNSIGNED NOT NULL,
   `cod` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nro` bigint UNSIGNED NOT NULL,
   `paciente_id` bigint UNSIGNED NOT NULL,
   `simetria_facial` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `diccion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -127,9 +128,19 @@ CREATE TABLE `examen_clinicos` (
   `linea_sup_mm` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `linea_inf` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `linea_inf_mm` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `observacion` text COLLATE utf8mb4_unicode_ci,
+  `modelo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fecha_registro` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `examen_clinicos`
+--
+
+INSERT INTO `examen_clinicos` (`id`, `cod`, `nro`, `paciente_id`, `simetria_facial`, `diccion`, `patron_facial`, `respiracion`, `perfil`, `relacion_labial`, `labios`, `maxilar_superior`, `deglucion`, `lengua_deglucion`, `habito_bucal`, `denticion`, `overjet`, `higiene_bucal`, `salud_dental`, `relacion_molar`, `relacion_canina`, `amigdalas`, `mordida_cruzada`, `linea_sup`, `linea_sup_mm`, `linea_inf`, `linea_inf_mm`, `observacion`, `modelo`, `fecha_registro`, `created_at`, `updated_at`) VALUES
+(1, 'EC.1', 1, 1, 'SIMETRIA', 'NORMAL', 'MESOCEFALO', 'NASAL', 'RECTO', 'NORMAL', 'NORMALES', 'CLASE I', 'NORMAL', 'NORMAL', 'SUCCIÓN DE DEDOS', 'DECIDUA', 'NORMAL', 'MALA', 'MALA', 'CLASE I', 'CLASE I', 'NORMALES', 'DIENTE ANTERIOR', '', '', '', '', '', '1732395997.OBJ', '2024-11-23', '2024-11-24 01:06:45', '2024-11-24 01:06:45');
 
 -- --------------------------------------------------------
 
@@ -141,9 +152,19 @@ CREATE TABLE `examen_imagens` (
   `id` bigint UNSIGNED NOT NULL,
   `examen_clinico_id` bigint UNSIGNED NOT NULL,
   `imagen` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ext` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `examen_imagens`
+--
+
+INSERT INTO `examen_imagens` (`id`, `examen_clinico_id`, `imagen`, `ext`, `created_at`, `updated_at`) VALUES
+(10, 1, '01732396005.png', 'png', '2024-11-24 01:06:45', '2024-11-24 01:06:45'),
+(11, 1, '11732396005.png', 'png', '2024-11-24 01:06:45', '2024-11-24 01:06:45'),
+(12, 1, '21732396005.png', 'png', '2024-11-24 01:06:45', '2024-11-24 01:06:45');
 
 -- --------------------------------------------------------
 
@@ -175,7 +196,16 @@ INSERT INTO `historial_accions` (`id`, `user_id`, `accion`, `descripcion`, `dato
 (3, 1, 'MODIFICACIÓN', 'EL USUARIO admin MODIFICÓ UN PACIENTE', 'id: 1<br/>usuario: <br/>nombre: RAMIRO<br/>paterno: MAMANI<br/>materno: MAMANI<br/>ci: 123456<br/>ci_exp: LP<br/>dir: <br/>email: <br/>fono: 676767676<br/>password: <br/>tipo: <br/>foto: 1731972418_.jpg<br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:26:58<br/>updated_at: 2024-11-18 23:26:58<br/>', 'id: 1<br/>usuario: <br/>nombre: RAMIRO<br/>paterno: MAMANI<br/>materno: MAMANI<br/>ci: 123456<br/>ci_exp: LP<br/>dir: ZONA LOS OLIVOS<br/>email: <br/>fono: 676767676<br/>password: <br/>tipo: <br/>foto: 1731972418_.jpg<br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:26:58<br/>updated_at: 2024-11-18 23:28:29<br/>', 'PACIENTES', '2024-11-18', '23:28:29', '2024-11-19 03:28:29', '2024-11-19 03:28:29'),
 (4, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: ZONA LOS PEDREGALES<br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:28:59<br/>updated_at: 2024-11-18 23:28:59<br/>', NULL, 'PACIENTES', '2024-11-18', '23:28:59', '2024-11-19 03:28:59', '2024-11-19 03:28:59'),
 (5, 1, 'ELIMINACIÓN', 'EL USUARIO admin ELIMINÓ UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: ZONA LOS PEDREGALES<br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:28:59<br/>updated_at: 2024-11-18 23:28:59<br/>', NULL, 'PACIENTES', '2024-11-18', '23:29:37', '2024-11-19 03:29:37', '2024-11-19 03:29:37'),
-(6, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: <br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:30:02<br/>updated_at: 2024-11-18 23:30:02<br/>', NULL, 'PACIENTES', '2024-11-18', '23:30:02', '2024-11-19 03:30:02', '2024-11-19 03:30:02');
+(6, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN PACIENTE', 'id: 2<br/>usuario: <br/>nombre: MARIA<br/>paterno: GONZALES<br/>materno: <br/>ci: <br/>ci_exp: <br/>dir: <br/>email: <br/>fono: <br/>password: <br/>tipo: <br/>foto: <br/>fecha_registro: <br/>acceso: <br/>created_at: 2024-11-18 23:30:02<br/>updated_at: 2024-11-18 23:30:02<br/>', NULL, 'PACIENTES', '2024-11-18', '23:30:02', '2024-11-19 03:30:02', '2024-11-19 03:30:02'),
+(7, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN EXAMEN CLÍNICO', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732394116.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 20:39:51<br/>', NULL, 'EXAMEN CLÍNICO', '2024-11-23', '20:39:51', '2024-11-24 00:39:51', '2024-11-24 00:39:51'),
+(8, 1, 'MODIFICACIÓN', 'EL USUARIO admin MODIFICÓ UN EXAMEN CLÍNICO', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732394116.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 20:39:51<br/>', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395088.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 20:51:38<br/>', 'EXAMEN CLÍNICO', '2024-11-23', '20:51:38', '2024-11-24 00:51:38', '2024-11-24 00:51:38'),
+(9, 1, 'MODIFICACIÓN', 'EL USUARIO admin MODIFICÓ UN EXAMEN CLÍNICO', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395088.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 20:51:38<br/>', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395088.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 20:51:38<br/>', 'EXAMEN CLÍNICO', '2024-11-23', '21:02:17', '2024-11-24 01:02:17', '2024-11-24 01:02:17'),
+(10, 1, 'MODIFICACIÓN', 'EL USUARIO admin MODIFICÓ UN EXAMEN CLÍNICO', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395088.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 20:51:38<br/>', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395754.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 21:02:41<br/>', 'EXAMEN CLÍNICO', '2024-11-23', '21:02:41', '2024-11-24 01:02:41', '2024-11-24 01:02:41'),
+(11, 1, 'ELIMINACIÓN', 'EL USUARIO admin ELIMINÓ UN EXAMEN CLÍNICO', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395754.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 20:39:51<br/>updated_at: 2024-11-23 21:02:41<br/>', NULL, 'EXAMEN CLÍNICO', '2024-11-23', '21:04:49', '2024-11-24 01:04:49', '2024-11-24 01:04:49'),
+(12, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN EXAMEN CLÍNICO', 'id: 2<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395904.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 21:05:14<br/>updated_at: 2024-11-23 21:05:14<br/>', NULL, 'EXAMEN CLÍNICO', '2024-11-23', '21:05:14', '2024-11-24 01:05:14', '2024-11-24 01:05:14'),
+(13, 1, 'MODIFICACIÓN', 'EL USUARIO admin MODIFICÓ UN EXAMEN CLÍNICO', 'id: 2<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395904.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 21:05:14<br/>updated_at: 2024-11-23 21:05:14<br/>', 'id: 2<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395927.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 21:05:14<br/>updated_at: 2024-11-23 21:05:44<br/>', 'EXAMEN CLÍNICO', '2024-11-23', '21:05:44', '2024-11-24 01:05:44', '2024-11-24 01:05:44'),
+(14, 1, 'ELIMINACIÓN', 'EL USUARIO admin ELIMINÓ UN EXAMEN CLÍNICO', 'id: 2<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: COINCIDE LINEA MEDIA FACIAL<br/>linea_sup_mm: <br/>linea_inf: COINCIDE LINEA MEDIA FACIAL<br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395927.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 21:05:14<br/>updated_at: 2024-11-23 21:05:44<br/>', NULL, 'EXAMEN CLÍNICO', '2024-11-23', '21:05:50', '2024-11-24 01:05:50', '2024-11-24 01:05:50'),
+(15, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN EXAMEN CLÍNICO', 'id: 1<br/>cod: EC.1<br/>nro: 1<br/>paciente_id: 1<br/>simetria_facial: SIMETRIA<br/>diccion: NORMAL<br/>patron_facial: MESOCEFALO<br/>respiracion: NASAL<br/>perfil: RECTO<br/>relacion_labial: NORMAL<br/>labios: NORMALES<br/>maxilar_superior: CLASE I<br/>deglucion: NORMAL<br/>lengua_deglucion: NORMAL<br/>habito_bucal: SUCCIÓN DE DEDOS<br/>denticion: DECIDUA<br/>overjet: NORMAL<br/>higiene_bucal: MALA<br/>salud_dental: MALA<br/>relacion_molar: CLASE I<br/>relacion_canina: CLASE I<br/>amigdalas: NORMALES<br/>mordida_cruzada: DIENTE ANTERIOR<br/>linea_sup: <br/>linea_sup_mm: <br/>linea_inf: <br/>linea_inf_mm: <br/>observacion: <br/>modelo: 1732395997.OBJ<br/>fecha_registro: 2024-11-23<br/>created_at: 2024-11-23 21:06:45<br/>updated_at: 2024-11-23 21:06:45<br/>', NULL, 'EXAMEN CLÍNICO', '2024-11-23', '21:06:45', '2024-11-24 01:06:45', '2024-11-24 01:06:45');
 
 -- --------------------------------------------------------
 
@@ -369,19 +399,19 @@ ALTER TABLE `consultas`
 -- AUTO_INCREMENT de la tabla `examen_clinicos`
 --
 ALTER TABLE `examen_clinicos`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `examen_imagens`
 --
 ALTER TABLE `examen_imagens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `historial_accions`
 --
 ALTER TABLE `historial_accions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`

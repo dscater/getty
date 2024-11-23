@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\ExamenClinicoController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\ProfileController;
@@ -64,6 +65,16 @@ Route::middleware('auth')->prefix("admin")->group(function () {
     Route::get("pacientes/info/{urbanizacion}", [PacienteController::class, 'info'])->name("pacientes.info");
     Route::resource("pacientes", PacienteController::class)->only(
         ["index", "store", "update", "show", "destroy"]
+    );
+
+    // EXAMENCLINICOS
+    Route::get("examen_clinicos/obtienem", [ExamenClinicoController::class, 'obtienem'])->name("examen_clinicos.obtienem");
+    Route::get("examen_clinicos/api", [ExamenClinicoController::class, 'api'])->name("examen_clinicos.api");
+    Route::get("examen_clinicos/paginado", [ExamenClinicoController::class, 'paginado'])->name("examen_clinicos.paginado");
+    Route::get("examen_clinicos/listado", [ExamenClinicoController::class, 'listado'])->name("examen_clinicos.listado");
+    Route::get("examen_clinicos/info/{urbanizacion}", [ExamenClinicoController::class, 'info'])->name("examen_clinicos.info");
+    Route::resource("examen_clinicos", ExamenClinicoController::class)->only(
+        ["index", "create", "store", "edit", "update", "show", "destroy"]
     );
 
 

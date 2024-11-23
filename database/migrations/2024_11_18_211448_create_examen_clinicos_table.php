@@ -38,6 +38,9 @@ return new class extends Migration
             $table->string("linea_sup_mm")->nullable();
             $table->string("linea_inf");
             $table->string("linea_inf_mm")->nullable();
+            $table->text("observacion")->nullable();
+            $table->string("modelo");
+            $table->date("fecha_registro")->nullable();
             $table->timestamps();
 
             $table->foreign("paciente_id")->on("pacientes")->references("id");

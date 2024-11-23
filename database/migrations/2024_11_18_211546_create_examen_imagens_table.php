@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("examen_clinico_id");
             $table->string("imagen");
+            $table->string("ext");
             $table->timestamps();
 
             $table->foreign("examen_clinico_id")->on("examen_clinicos")->references("id");
