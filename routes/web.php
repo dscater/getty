@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AntecedenteDentalController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\ExamenClinicoController;
 use App\Http\Controllers\InicioController;
@@ -62,7 +63,6 @@ Route::middleware('auth')->prefix("admin")->group(function () {
     Route::get("pacientes/api", [PacienteController::class, 'api'])->name("pacientes.api");
     Route::get("pacientes/paginado", [PacienteController::class, 'paginado'])->name("pacientes.paginado");
     Route::get("pacientes/listado", [PacienteController::class, 'listado'])->name("pacientes.listado");
-    Route::get("pacientes/info/{urbanizacion}", [PacienteController::class, 'info'])->name("pacientes.info");
     Route::resource("pacientes", PacienteController::class)->only(
         ["index", "store", "update", "show", "destroy"]
     );
@@ -72,8 +72,18 @@ Route::middleware('auth')->prefix("admin")->group(function () {
     Route::get("examen_clinicos/api", [ExamenClinicoController::class, 'api'])->name("examen_clinicos.api");
     Route::get("examen_clinicos/paginado", [ExamenClinicoController::class, 'paginado'])->name("examen_clinicos.paginado");
     Route::get("examen_clinicos/listado", [ExamenClinicoController::class, 'listado'])->name("examen_clinicos.listado");
-    Route::get("examen_clinicos/info/{urbanizacion}", [ExamenClinicoController::class, 'info'])->name("examen_clinicos.info");
+    Route::get("examen_clinicos/detalle/{examen_clinico}", [ExamenClinicoController::class, 'detalle'])->name("examen_clinicos.detalle");
     Route::resource("examen_clinicos", ExamenClinicoController::class)->only(
+        ["index", "create", "store", "edit", "update", "show", "destroy"]
+    );
+
+    // ANTECEDENTES DENALTES
+    Route::get("antecedente_dentals/obtienem", [AntecedenteDentalController::class, 'obtienem'])->name("antecedente_dentals.obtienem");
+    Route::get("antecedente_dentals/api", [AntecedenteDentalController::class, 'api'])->name("antecedente_dentals.api");
+    Route::get("antecedente_dentals/paginado", [AntecedenteDentalController::class, 'paginado'])->name("antecedente_dentals.paginado");
+    Route::get("antecedente_dentals/listado", [AntecedenteDentalController::class, 'listado'])->name("antecedente_dentals.listado");
+    Route::get("antecedente_dentals/detalle/{antecedente_dental}", [AntecedenteDentalController::class, 'detalle'])->name("antecedente_dentals.detalle");
+    Route::resource("antecedente_dentals", AntecedenteDentalController::class)->only(
         ["index", "create", "store", "edit", "update", "show", "destroy"]
     );
 
@@ -81,5 +91,17 @@ Route::middleware('auth')->prefix("admin")->group(function () {
     // REPORTES
     Route::get('reportes/usuarios', [ReporteController::class, 'usuarios'])->name("reportes.usuarios");
     Route::get('reportes/r_usuarios', [ReporteController::class, 'r_usuarios'])->name("reportes.r_usuarios");
+
+    Route::get('reportes/pacientes', [ReporteController::class, 'pacientes'])->name("reportes.pacientes");
+    Route::get('reportes/r_pacientes', [ReporteController::class, 'r_pacientes'])->name("reportes.r_pacientes");
+
+    Route::get('reportes/examen_clinicos', [ReporteController::class, 'examen_clinicos'])->name("reportes.examen_clinicos");
+    Route::get('reportes/r_examen_clinicos', [ReporteController::class, 'r_examen_clinicos'])->name("reportes.r_examen_clinicos");
+
+    Route::get('reportes/antecedente_dental', [ReporteController::class, 'antecedente_dental'])->name("reportes.antecedente_dental");
+    Route::get('reportes/r_antecedente_dental', [ReporteController::class, 'r_antecedente_dental'])->name("reportes.r_antecedente_dental");
+
+    Route::get('reportes/pacientes_doctor', [ReporteController::class, 'pacientes_doctor'])->name("reportes.pacientes_doctor");
+    Route::get('reportes/r_pacientes_doctor', [ReporteController::class, 'r_pacientes_doctor'])->name("reportes.r_pacientes_doctor");
 });
 require __DIR__ . '/auth.php';

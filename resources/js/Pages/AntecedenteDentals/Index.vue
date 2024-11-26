@@ -1,7 +1,7 @@
 <script setup>
 import { useApp } from "@/composables/useApp";
 import { Head, Link, router } from "@inertiajs/vue3";
-import { useExamenClinicos } from "@/composables/examen_clinicos/useExamenClinicos";
+import { useAntecedenteDentals } from "@/composables/antecedente_dentals/useAntecedenteDentals";
 import { initDataTable } from "@/composables/datatable.js";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import PanelToolbar from "@/Components/PanelToolbar.vue";
@@ -13,16 +13,16 @@ onMounted(() => {
 });
 
 const {
-    getExamenClinicos,
-    setExamenClinico,
-    limpiarExamenClinico,
-    deleteExamenClinico,
-} = useExamenClinicos();
+    getAntecedenteDentals,
+    setAntecedenteDental,
+    limpiarAntecedenteDental,
+    deleteAntecedenteDental,
+} = useAntecedenteDentals();
 
 const columns = [
     {
         title: "",
-        data: "cod",
+        data: "id",
     },
     {
         title: "",
@@ -62,7 +62,7 @@ const columns = [
                  data-id="${row.id}" 
                  data-nombre="${row.cod} | ${row.paciente.full_name}" 
                  data-url="${route(
-                     "examen_clinicos.destroy",
+                     "antecedente_dentals.destroy",
                      row.id
                  )}"><i class="fa fa-trash"></i></button>
             `;
@@ -73,19 +73,19 @@ const loading = ref(false);
 
 const accionesRow = () => {
     // detalle
-    $("#table-examen_clinico").on("click", "button.detalle", function (e) {
+    $("#table-antecedente_dental").on("click", "button.detalle", function (e) {
         e.preventDefault();
         let id = $(this).attr("data-id");
-        router.get(route("examen_clinicos.detalle", id));
+        router.get(route("antecedente_dentals.detalle", id));
     });
     // editar
-    $("#table-examen_clinico").on("click", "button.editar", function (e) {
+    $("#table-antecedente_dental").on("click", "button.editar", function (e) {
         e.preventDefault();
         let id = $(this).attr("data-id");
-        router.get(route("examen_clinicos.edit", id));
+        router.get(route("antecedente_dentals.edit", id));
     });
     // eliminar
-    $("#table-examen_clinico").on("click", "button.eliminar", function (e) {
+    $("#table-antecedente_dental").on("click", "button.eliminar", function (e) {
         e.preventDefault();
         let nombre = $(this).attr("data-nombre");
         let id = $(this).attr("data-id");
@@ -100,7 +100,7 @@ const accionesRow = () => {
         }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                let respuesta = await deleteExamenClinico(id);
+                let respuesta = await deleteAntecedenteDental(id);
                 if (respuesta && respuesta.sw) {
                     updateDatatable();
                 }
@@ -117,9 +117,9 @@ const updateDatatable = () => {
 
 onMounted(async () => {
     datatable = initDataTable(
-        "#table-examen_clinico",
+        "#table-antecedente_dental",
         columns,
-        route("examen_clinicos.api")
+        route("antecedente_dentals.api")
     );
     datatableInitialized.value = true;
     accionesRow();
@@ -134,16 +134,16 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-    <Head title="Examen Clínico"></Head>
+    <Head title="Antecedente Dental"></Head>
 
     <!-- BEGIN breadcrumb -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="javascript:;">Inicio</a></li>
-        <li class="breadcrumb-item active">Examen Clínico</li>
+        <li class="breadcrumb-item active">Antecedente Dental</li>
     </ol>
     <!-- END breadcrumb -->
     <!-- BEGIN page-header -->
-    <h1 class="page-header">Examen Clínico</h1>
+    <h1 class="page-header">Antecedente Dental</h1>
     <!-- END page-header -->
 
     <div class="row">
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
                 <div class="panel-heading">
                     <h4 class="panel-title btn-nuevo">
                         <Link
-                            :href="route('examen_clinicos.create')"
+                            :href="route('antecedente_dentals.create')"
                             class="btn btn-primary d-inline-block"
                         >
                             <i class="fa fa-plus"></i> Nuevo
@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
                 <!-- BEGIN panel-body -->
                 <div class="panel-body">
                     <table
-                        id="table-examen_clinico"
+                        id="table-antecedente_dental"
                         width="100%"
                         class="table table-striped table-bordered align-middle text-nowrap tabla_datos"
                     >

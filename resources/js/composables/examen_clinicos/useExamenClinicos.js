@@ -168,7 +168,7 @@ export const useExamenClinicos = () => {
         }
     };
 
-    const setExamenClinico = (item = null) => {
+    const setExamenClinico = (item = null, paciente = false) => {
         if (item) {
             oExamenClinico.id = item.id;
             oExamenClinico.paciente_id = item.paciente_id;
@@ -198,6 +198,9 @@ export const useExamenClinicos = () => {
             oExamenClinico.observacion = item.observacion;
             oExamenClinico.modelo = item.modelo;
             oExamenClinico.examen_imagens = item.examen_imagens;
+            if (paciente) {
+                oExamenClinico.paciente = item.paciente;
+            }
             oExamenClinico._method = "PUT";
             return oExamenClinico;
         }
@@ -226,9 +229,9 @@ export const useExamenClinicos = () => {
         oExamenClinico.relacion_canina = "CLASE I";
         oExamenClinico.amigdalas = "NORMALES";
         oExamenClinico.mordida_cruzada = "DIENTE ANTERIOR";
-        oExamenClinico.linea_sup = "";
+        oExamenClinico.linea_sup = "COINCIDE LINEA MEDIA FACIAL";
         oExamenClinico.linea_sup_mm = "";
-        oExamenClinico.linea_inf = "";
+        oExamenClinico.linea_inf = "COINCIDE LINEA MEDIA FACIAL";
         oExamenClinico.linea_inf_mm = "";
         oExamenClinico.observacion = "";
         oExamenClinico.modelo = "";

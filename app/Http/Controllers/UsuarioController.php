@@ -50,7 +50,7 @@ class UsuarioController extends Controller
 
     public function listado()
     {
-        $usuarios = User::where("id", "!=", 1)->where("tipo", "!=", "CLIENTE")->get();
+        $usuarios = User::all();
         return response()->JSON([
             "usuarios" => $usuarios
         ]);
@@ -77,7 +77,7 @@ class UsuarioController extends Controller
     public function api(Request $request)
     {
         Log::debug($request);
-        $usuarios = User::where("id", "!=", 1)->where("tipo", "!=", "CLIENTE");
+        $usuarios = User::where("id", "!=", 1);
         $usuarios = $usuarios->get();
         return response()->JSON(["data" => $usuarios]);
     }
@@ -85,7 +85,7 @@ class UsuarioController extends Controller
     public function paginado(Request $request)
     {
         $search = $request->search;
-        $usuarios = User::where("id", "!=", 1)->where("tipo", "!=", "CLIENTE");
+        $usuarios = User::where("id", "!=", 1);
 
         if (trim($search) != "") {
             $usuarios->where("nombre", "LIKE", "%$search%");

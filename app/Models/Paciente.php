@@ -29,6 +29,7 @@ class Paciente extends Model
         "correo_s",
         "agradecer",
         "nom_edad_hmnos",
+        "user_id"
     ];
 
     protected $appends = ["url_foto", "foto_b64", "full_name", "full_ci", "fecha_registro_t"];
@@ -66,5 +67,10 @@ class Paciente extends Model
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         return $base64;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

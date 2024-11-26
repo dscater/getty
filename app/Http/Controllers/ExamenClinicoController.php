@@ -8,6 +8,7 @@ use App\Models\HistorialAccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
@@ -31,7 +32,12 @@ class ExamenClinicoController extends Controller
 
     public function listado()
     {
-        $examen_clinicos = ExamenClinico::with(["paciente"])->select("examen_clinicos.*")->get();
+        $examen_clinicos = ExamenClinico::with(["paciente"])->select("examen_clinicos.*");
+
+        $examen_clinicos->join("pacientes", "pacientes.id", "=", "examen_clinicos.paciente_id");
+        $examen_clinicos->where("pacientes.user_id", Auth::user()->id);
+
+        $examen_clinicos = $examen_clinicos->get();
         return response()->JSON([
             "examen_clinicos" => $examen_clinicos
         ]);
@@ -41,6 +47,8 @@ class ExamenClinicoController extends Controller
     {
         // Log::debug($request);
         $examen_clinicos = ExamenClinico::with(["paciente"])->select("examen_clinicos.*");
+        $examen_clinicos->join("pacientes", "pacientes.id", "=", "examen_clinicos.paciente_id");
+        $examen_clinicos->where("pacientes.user_id", Auth::user()->id);
         $examen_clinicos = $examen_clinicos->get();
         return response()->JSON(["data" => $examen_clinicos]);
     }
@@ -137,6 +145,12 @@ class ExamenClinicoController extends Controller
         return Inertia::render("ExamenClinicos/Edit", compact("examen_clinico"));
     }
 
+    public function detalle(ExamenClinico $examen_clinico)
+    {
+        $examen_clinico = $examen_clinico->load(["paciente", "examen_imagens"]);
+        return Inertia::render("ExamenClinicos/Detalle", compact("examen_clinico"));
+    }
+
     public function update(ExamenClinico $examen_clinico, Request $request)
     {
         $request->validate($this->validacion, $this->mensajes);
@@ -159,8 +173,11 @@ class ExamenClinicoController extends Controller
 
         DB::beginTransaction();
         try {
+            $anterior_modelo = $examen_clinico->modelo;
             $datos_original = HistorialAccion::getDetalleRegistro($examen_clinico, "examen_clinicos");
-            $examen_clinico->update(array_map('mb_strtoupper', $request->except('examen_imagens', 'eliminados')));
+            $examen_clinico->update(array_map('mb_strtoupper', $request->except('examen_imagens', 'eliminados', 'paciente')));
+            $examen_clinico->modelo = $request->modelo;
+            $examen_clinico->save();
 
             // eliminados
             if ($request->eliminados) {
@@ -198,7 +215,10 @@ class ExamenClinicoController extends Controller
                     }
                 }
             }
-            \File::delete(public_path("imgs/examen_clinicos/" . $examen_clinico->modelo));
+
+            if ($anterior_modelo != $examen_clinico->modelo) {
+                \File::delete(public_path("imgs/examen_clinicos/" . $anterior_modelo));
+            }
 
             $datos_nuevo = HistorialAccion::getDetalleRegistro($examen_clinico, "examen_clinicos");
             HistorialAccion::create([

@@ -42,9 +42,29 @@ class PacienteController extends Controller
         return Inertia::render("Pacientes/Index");
     }
 
-    public function listado()
+    public function listado(Request $request)
     {
-        $pacientes = Paciente::select("pacientes.*")->get();
+        $pacientes = Paciente::select("pacientes.*");
+        $pacientes->where("user_id", Auth::user()->id);
+        if ($request->sin_antecedente) {
+            if ($request->id && $request->id != '') {
+                $pacientes = $pacientes->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('examen_clinicos')
+                        ->whereRaw('examen_clinicos.paciente_id = pacientes.id');
+                })->orWhere(function ($subquery) use ($request) {
+                    $subquery->whereIn('pacientes.id', [$request->id]);
+                });
+            } else {
+                $pacientes = $pacientes->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('examen_clinicos')
+                        ->whereRaw('examen_clinicos.paciente_id = pacientes.id');
+                });
+            }
+        }
+
+        $pacientes = $pacientes->get();
         return response()->JSON([
             "pacientes" => $pacientes
         ]);
@@ -54,6 +74,7 @@ class PacienteController extends Controller
     {
         // Log::debug($request);
         $pacientes = Paciente::select("pacientes.*");
+        $pacientes->where("user_id", Auth::user()->id);
         $pacientes = $pacientes->get();
         return response()->JSON(["data" => $pacientes]);
     }
@@ -89,6 +110,8 @@ class PacienteController extends Controller
         DB::beginTransaction();
         try {
             // crear el Paciente
+            $request["fecha_registro"] = date("Y-m-d");
+            $request["user_id"] = Auth::user()->id;
             $nuevo_paciente = Paciente::create(array_map('mb_strtoupper', $request->except('foto')));
             $nuevo_paciente->save();
             if ($request->hasFile('foto')) {

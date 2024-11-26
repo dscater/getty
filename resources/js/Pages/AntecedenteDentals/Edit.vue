@@ -1,12 +1,12 @@
 <script setup>
 import { useApp } from "@/composables/useApp";
 import { Head, Link } from "@inertiajs/vue3";
-import { useExamenClinicos } from "@/composables/examen_clinicos/useExamenClinicos";
+import { useAntecedenteDentals } from "@/composables/antecedente_dentals/useAntecedenteDentals";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import PanelToolbar from "@/Components/PanelToolbar.vue";
 import Formulario from "./Formulario.vue";
 const props = defineProps({
-    examen_clinico: {
+    antecedente_dental: {
         type: Object,
         default: null,
     },
@@ -18,9 +18,9 @@ onMounted(() => {
     }, 300);
 });
 
-const { oExamenClinico, setExamenClinico } = useExamenClinicos();
+const { oAntecedenteDental, setAntecedenteDental } = useAntecedenteDentals();
 
-setExamenClinico(props.examen_clinico, true);
+setAntecedenteDental(props.antecedente_dental);
 
 const loading = ref(false);
 
@@ -28,19 +28,19 @@ onMounted(async () => {});
 onBeforeUnmount(() => {});
 </script>
 <template>
-    <Head title="Examen Clínico"></Head>
+    <Head title="Antecedente Dental"></Head>
 
     <!-- BEGIN breadcrumb -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="javascript:;">Inicio</a></li>
         <li class="breadcrumb-item">
-            <Link :href="route('examen_clinicos.index')">Examen clínico</Link>
+            <Link :href="route('antecedente_dentals.index')">Antecedente Dental</Link>
         </li>
-        <li class="breadcrumb-item active">Detalle</li>
+        <li class="breadcrumb-item active">Editar</li>
     </ol>
     <!-- END breadcrumb -->
     <!-- BEGIN page-header -->
-    <h1 class="page-header">Examen Clínico > detalle</h1>
+    <h1 class="page-header">Antecedente Dental > editar</h1>
     <!-- END page-header -->
 
     <div class="row">
@@ -51,7 +51,7 @@ onBeforeUnmount(() => {});
                 <div class="panel-heading">
                     <h4 class="panel-title btn-nuevo">
                         <Link
-                            :href="route('examen_clinicos.index')"
+                            :href="route('antecedente_dentals.index')"
                             class="btn btn-outline-default d-inline-block"
                         >
                             <i class="fa fa-arrow-left"></i> Volver
@@ -62,7 +62,7 @@ onBeforeUnmount(() => {});
                 <!-- END panel-heading -->
                 <!-- BEGIN panel-body -->
                 <div class="panel-body">
-                    <Formulario :detalle="true"></Formulario>
+                    <Formulario></Formulario>
                 </div>
                 <!-- END panel-body -->
             </div>

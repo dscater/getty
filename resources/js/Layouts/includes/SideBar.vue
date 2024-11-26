@@ -535,17 +535,22 @@ const logout = () => {
                 <div
                     class="menu-item"
                     :class="[
-                        route_current == 'antencedente_dentals.index'
+                        route_current == 'antecedente_dentals.index' ||
+                        route_current == 'antecedente_dentals.create' ||
+                        route_current == 'antecedente_dentals.edit'
                             ? 'active'
                             : '',
                     ]"
                 >
-                    <a href="" class="menu-link">
+                    <Link
+                        :href="route('antecedente_dentals.index')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-list"></i>
                         </div>
                         <div class="menu-text">Antecedentes dentales</div>
-                    </a>
+                    </Link>
                 </div>
                 <div
                     v-if="
@@ -558,7 +563,10 @@ const logout = () => {
                             : '',
                     ]"
                 >
-                    <Link :href="route('examen_clinicos.index')" class="menu-link">
+                    <Link
+                        :href="route('examen_clinicos.index')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-list-alt"></i>
                         </div>
@@ -582,9 +590,11 @@ const logout = () => {
                     v-if="
                         user_logeado.permisos.includes('reportes.usuarios') ||
                         user_logeado.permisos.includes(
-                            'reportes.lotes_terrenos'
+                            'reportes.pacientes'
                         ) ||
-                        user_logeado.permisos.includes('reportes.clientes')
+                        user_logeado.permisos.includes('reportes.examen_clinicos')||
+                        user_logeado.permisos.includes('reportes.antecedente_dental')||
+                        user_logeado.permisos.includes('reportes.pacientes_doctor')
                     "
                 >
                     <a href="javascript:;" class="menu-link">
@@ -612,6 +622,88 @@ const logout = () => {
                                 :href="route('reportes.usuarios')"
                                 class="menu-link"
                                 ><div class="menu-text">Usuarios</div></Link
+                            >
+                        </div>
+                        <div
+                            v-if="
+                                user_logeado.permisos.includes(
+                                    'reportes.pacientes'
+                                )
+                            "
+                            class="menu-item"
+                            :class="[
+                                route_current == 'reportes.pacientes'
+                                    ? 'active'
+                                    : '',
+                            ]"
+                        >
+                            <Link
+                                :href="route('reportes.pacientes')"
+                                class="menu-link"
+                                ><div class="menu-text">Pacientes</div></Link
+                            >
+                        </div>
+                        <div
+                            v-if="
+                                user_logeado.permisos.includes(
+                                    'reportes.examen_clinicos'
+                                )
+                            "
+                            class="menu-item"
+                            :class="[
+                                route_current == 'reportes.examen_clinicos'
+                                    ? 'active'
+                                    : '',
+                            ]"
+                        >
+                            <Link
+                                :href="route('reportes.examen_clinicos')"
+                                class="menu-link"
+                                ><div class="menu-text">
+                                    Examenes clínicos
+                                </div></Link
+                            >
+                        </div>
+                        <div
+                            v-if="
+                                user_logeado.permisos.includes(
+                                    'reportes.antecedente_dental'
+                                )
+                            "
+                            class="menu-item"
+                            :class="[
+                                route_current == 'reportes.antecedente_dental'
+                                    ? 'active'
+                                    : '',
+                            ]"
+                        >
+                            <Link
+                                :href="route('reportes.antecedente_dental')"
+                                class="menu-link"
+                                ><div class="menu-text">
+                                    Antecedentes dentales
+                                </div></Link
+                            >
+                        </div>
+                        <div
+                            v-if="
+                                user_logeado.permisos.includes(
+                                    'reportes.pacientes_doctor'
+                                )
+                            "
+                            class="menu-item"
+                            :class="[
+                                route_current == 'reportes.pacientes_doctor'
+                                    ? 'active'
+                                    : '',
+                            ]"
+                        >
+                            <Link
+                                :href="route('reportes.pacientes_doctor')"
+                                class="menu-link"
+                                ><div class="menu-text">
+                                    Cant. Pacientes por doctor
+                                </div></Link
                             >
                         </div>
                     </div>

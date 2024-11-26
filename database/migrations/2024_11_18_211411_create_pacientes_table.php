@@ -32,8 +32,11 @@ return new class extends Migration
             $table->string("correo_s")->nullable();
             $table->string("agradecer");
             $table->string("nom_edad_hmnos", 500)->nullable();
+            $table->unsignedBigInteger("user_id");
             $table->date("fecha_registro")->nullable();
             $table->timestamps();
+
+            $table->foreign("user_id")->on("users")->references("id");
         });
     }
 

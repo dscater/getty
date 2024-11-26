@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm, usePage, Link } from "@inertiajs/vue3";
 import { useExamenClinicos } from "@/composables/examen_clinicos/useExamenClinicos";
 import { usePacientes } from "@/composables/pacientes/usePacientes";
 import { ref, onMounted, onBeforeUnmount } from "vue";
@@ -9,8 +9,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import axios from "axios";
 
+const propsPage = defineProps({
+    detalle: {
+        type: Boolean,
+        default: false,
+    },
+});
+
 const { oExamenClinico, limpiarExamenClinico } = useExamenClinicos();
-console.log(oExamenClinico.examen_imagens);
 const { getPacientes } = usePacientes();
 let form = useForm(oExamenClinico);
 const listPacientes = ref([]);
@@ -72,7 +78,6 @@ const detectaArchivos = (files) => {
 };
 
 const detectaEliminados = (eliminados) => {
-    console.log(eliminados);
     form.eliminados = eliminados;
     if (form.examen_imagens.length <= 0) {
         modeloGenerado.value = false;
@@ -243,7 +248,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <form @submit.prevent="enviarFormulario()">
+    <form @submit.prevent="enviarFormulario()" v-if="!propsPage.detalle">
         <div class="row">
             <div class="col-12 mb-3">
                 <select class="form-select" v-model="form.paciente_id">
@@ -770,6 +775,10 @@ onBeforeUnmount(() => {
                                     class="renderer-container"
                                 ></div>
                             </div>
+                            <div class="col-12">
+                                <label>Observación</label>
+                                <textarea class="form-control" v-model="form.observacion" rows="2"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -787,6 +796,338 @@ onBeforeUnmount(() => {
             </div>
         </div>
     </form>
+    <div v-else>
+        <div class="row">
+            <div class="col-12 mb-3">
+                <input
+                    type="text"
+                    :value="form.paciente?.full_name"
+                    class="form-control"
+                    readonly
+                />
+            </div>
+            <!-- info 1 -->
+            <div class="col-12">
+                <div class="card">
+                    <div
+                        class="bg-primary text-white card-header header_info"
+                        @click="info1 = !info1"
+                    >
+                        EXAMEN CLÍNICO EXTRAORAL
+                        <i
+                            class="fa"
+                            :class="info1 ? 'fa-minus' : 'fa-plus'"
+                        ></i>
+                    </div>
+                    <div
+                        class="card-body collapse"
+                        :class="[info1 ? 'show' : '']"
+                    >
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label>SIMETRIA FACIAL</label>
+                                <input
+                                    type="text"
+                                    v-model="form.simetria_facial"
+                                    class="form-control"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>DICCIÓN</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.diccion"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>PATRÓN FACIAL</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.patron_facial"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>RESPIRACIÓN</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.respiracion"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>PERFIL</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.perfil"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>RELACIÓN LABIAL</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.relacion_labial"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>LABIOS</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.labios"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>MAXILAR SUPERIOR</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.maxilar_superior"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>DEGLUCIÓN</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.deglucion"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>LENGUA Y DEGLUCIÓN</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.lengua_deglucion"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>HABITOS BUCALES</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.habito_bucal"
+                                    readonly
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- info 2 -->
+            <div class="col-12">
+                <div class="card">
+                    <div
+                        class="bg-primary text-white card-header header_info"
+                        @click="info2 = !info2"
+                    >
+                        EXAMEN CLÍNICO INTRAORAL
+                        <i
+                            class="fa"
+                            :class="info2 ? 'fa-minus' : 'fa-plus'"
+                        ></i>
+                    </div>
+                    <div
+                        class="card-body collapse"
+                        :class="[info2 ? 'show' : '']"
+                    >
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label>DENTICIÓN</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.denticion"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>OVERJET</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.overjet"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>HIGIENE BUCAL</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.higiene_bucal"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>SALUD DENTAL</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.salud_dental"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>RELACIÓN MOLAR</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.relacion_molar"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>RELACIÓN CANINA</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.relacion_canina"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4">
+                                <label>AMIGDALAS</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.amigdalas"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4">
+                                <label>MORDIDA CRUZADA</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.mordida_cruzada"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4">
+                                <label>SUPERIOR</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.linea_sup"
+                                    readonly
+                                />
+                            </div>
+                            <div
+                                class="col-md-4"
+                                v-if="
+                                    form.linea_sup == 'A LA DERECHA MM' ||
+                                    form.linea_sup == 'A LA IZQUIERDA MM'
+                                "
+                            >
+                                <label>MM SUPERIOR</label>
+                                <input
+                                    type="number"
+                                    class="form-select"
+                                    v-model="form.linea_sup_mm"
+                                    readonly
+                                />
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>INFERIOR</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="form.linea_inf"
+                                    readonly
+                                />
+                            </div>
+                            <div
+                                class="col-md-4 mb-3"
+                                v-if="
+                                    form.linea_inf == 'A LA DERECHA MM' ||
+                                    form.linea_inf == 'A LA IZQUIERDA MM'
+                                "
+                            >
+                                <label>MM INFERIOR</label>
+                                <input
+                                    type="number"
+                                    class="form-select"
+                                    v-model="form.linea_inf_mm"
+                                    readonly
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- info 3 -->
+            <div class="col-12">
+                <div class="card">
+                    <div
+                        class="bg-primary text-white card-header header_info"
+                        @click="info3 = !info3"
+                    >
+                        IMAGÉNES EN YESOS DEL PACIENTE
+                        <i
+                            class="fa"
+                            :class="info3 ? 'fa-minus' : 'fa-plus'"
+                        ></i>
+                    </div>
+                    <div
+                        class="card-body collapse"
+                        :class="[info3 ? 'show' : '']"
+                    >
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div
+                                        class="col-md-4"
+                                        v-for="item in form.examen_imagens"
+                                    >
+                                        <img
+                                            :src="item.url_imagen"
+                                            alt=""
+                                            width="100%"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 contenedor_loading">
+                                <h4>Modelo generado</h4>
+                                <div
+                                    ref="rendererContainer"
+                                    class="renderer-container"
+                                ></div>
+                            </div>
+                            <div class="col-12">
+                                <label>Observación</label>
+                                <textarea class="form-control" v-model="form.observacion" rows="2" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-md-4">
+                <Link
+                    :href="route('examen_clinicos.index')"
+                    class="btn btn-primary"
+                >
+                    <i class="fa fa-arrow-left"></i> Volver
+                </Link>
+            </div>
+        </div>
+    </div>
 </template>
 <style scoped>
 .header_info {

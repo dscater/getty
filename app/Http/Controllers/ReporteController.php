@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AntecedenteDental;
 use App\Models\Cliente;
+use App\Models\ExamenClinico;
 use App\Models\Lote;
+use App\Models\Paciente;
 use App\Models\Urbanizacion;
 use App\Models\User;
 use App\Models\VentaLote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use PDF;
@@ -44,62 +48,32 @@ class ReporteController extends Controller
         return $pdf->stream('usuarios.pdf');
     }
 
-    public function lotes_terrenos()
+    public function pacientes()
     {
-        return Inertia::render("Reportes/LotesTerrenos");
+        return Inertia::render("Reportes/Pacientes");
     }
 
-    public function r_lotes_terrenos(Request $request)
+    public function r_pacientes(Request $request)
     {
-        $urbanizacion_id = $request->urbanizacion_id;
-        $manzano_id = $request->manzano_id;
-        $ocupado = $request->ocupado;
-
-        $urbanizacions = Urbanizacion::select("urbanizacions.*");
-        if ($urbanizacion_id != 'todos') {
-            $urbanizacions->where("id", $urbanizacion_id);
-        }
-        $urbanizacions = $urbanizacions->get();
-
-        $pdf = PDF::loadView('reportes.lotes_terrenos', compact('urbanizacions', 'manzano_id', 'ocupado'))->setPaper('letter', 'portrait');
-
-        // ENUMERAR LAS PÁGINAS USANDO CANVAS
-        $pdf->output();
-        $dom_pdf = $pdf->getDomPDF();
-        $canvas = $dom_pdf->get_canvas();
-        $alto = $canvas->get_height();
-        $ancho = $canvas->get_width();
-        $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
-
-        return $pdf->stream('lotes_terrenos.pdf');
-    }
-
-    public function clientes()
-    {
-        return Inertia::render("Reportes/Clientes");
-    }
-
-    public function r_clientes(Request $request)
-    {
-        $estado_cliente =  $request->estado_cliente;
+        $paciente_id =  $request->paciente_id;
         $fecha_ini =  $request->fecha_ini;
         $fecha_fin =  $request->fecha_fin;
+        $pacientes = Paciente::select("pacientes.*");
 
-        $clientes = Cliente::select("clientes.*")
-            ->join("users", "users.id", "=", "clientes.user_id");
-
-        if ($estado_cliente != 'todos') {
-            $clientes->where("clientes.estado_cliente", $estado_cliente);
+        if ($paciente_id != 'todos') {
+            $pacientes->where("id", $paciente_id);
         }
 
         if ($fecha_ini && $fecha_fin) {
-            $clientes->whereBetween("users.fecha_registro", [$fecha_ini, $fecha_fin]);
+            $pacientes->whereBetween("fecha_registro", [$fecha_ini, $fecha_fin]);
         }
 
-        $clientes = $clientes->get();
+        $pacientes->where("user_id", Auth::user()->id);
+
+        $pacientes = $pacientes->get();
 
 
-        $pdf = PDF::loadView('reportes.clientes', compact('clientes'))->setPaper('letter', 'portrait');
+        $pdf = PDF::loadView('reportes.pacientes', compact('pacientes'))->setPaper('legal', 'landscape');
 
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
@@ -109,27 +83,36 @@ class ReporteController extends Controller
         $ancho = $canvas->get_width();
         $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
 
-        return $pdf->stream('clientes.pdf');
+        return $pdf->stream('pacientes.pdf');
     }
 
-    public function planilla_pagos()
+    public function examen_clinicos()
     {
-        return Inertia::render("Reportes/PlanillaPagos");
+        return Inertia::render("Reportes/ExamenClinicos");
     }
 
-    public function r_planilla_pagos(Request $request)
+    public function r_examen_clinicos(Request $request)
     {
-        $cliente_id =  $request->cliente_id;
+        $examen_clinico_id =  $request->examen_clinico_id;
+        $fecha_ini =  $request->fecha_ini;
+        $fecha_fin =  $request->fecha_fin;
+        $examen_clinicos = ExamenClinico::select("examen_clinicos.*")
+            ->join("pacientes", "pacientes.id", "=", "examen_clinicos.paciente_id");
 
-        $clientes = Cliente::select("clientes.*");
+        if ($examen_clinico_id != 'todos') {
+            $examen_clinicos->where("examen_clinicos.id", $examen_clinico_id);
+        } else {
+            $examen_clinicos->where("pacientes.user_id", Auth::user()->id);
 
-        if ($cliente_id != 'todos') {
-            $clientes->where("id", $cliente_id);
+            if ($fecha_ini && $fecha_fin) {
+                $examen_clinicos->whereBetween("examen_clinicos.fecha_registro", [$fecha_ini, $fecha_fin]);
+            }
         }
 
-        $clientes = $clientes->get();
+        $examen_clinicos = $examen_clinicos->get();
 
-        $pdf = PDF::loadView('reportes.planilla_pagos', compact('clientes'))->setPaper('letter', 'portrait');
+
+        $pdf = PDF::loadView('reportes.examen_clinicos', compact('examen_clinicos'))->setPaper('letter', 'portrait');
 
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
@@ -139,18 +122,34 @@ class ReporteController extends Controller
         $ancho = $canvas->get_width();
         $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
 
-        return $pdf->stream('planilla_pagos.pdf');
+        return $pdf->stream('examen_clinicos.pdf');
     }
 
-    public function planilla_venta(Request $request)
+    public function antecedente_dental()
     {
-        $venta_lote_id =  $request->venta_lote_id;
-        $venta_lote = VentaLote::find($venta_lote_id);
-        $clientes = Cliente::select("clientes.*");
-        $clientes->where("id", $venta_lote->cliente_id);
-        $clientes = $clientes->get();
+        return Inertia::render("Reportes/AntecedenteDental");
+    }
 
-        $pdf = PDF::loadView('reportes.planilla_pagos', compact('clientes', 'venta_lote_id'))->setPaper('letter', 'portrait');
+    public function r_antecedente_dental(Request $request)
+    {
+        $paciente_id =  $request->paciente_id;
+        $fecha_ini =  $request->fecha_ini;
+        $fecha_fin =  $request->fecha_fin;
+        $antecedente_dentals = AntecedenteDental::select("antecedente_dentals.*")
+            ->join("pacientes", "pacientes.id", "=", "antecedente_dentals.paciente_id");
+
+        if ($paciente_id != 'todos') {
+            $antecedente_dentals->where("antecedente_dentals.paciente_id", $paciente_id);
+        } else {
+            $antecedente_dentals->where("pacientes.user_id", Auth::user()->id);
+            if ($fecha_ini && $fecha_fin) {
+                $antecedente_dentals->whereBetween("antecedente_dentals.fecha_registro", [$fecha_ini, $fecha_fin]);
+            }
+        }
+
+        $antecedente_dentals = $antecedente_dentals->get();
+
+        $pdf = PDF::loadView('reportes.antecedente_dentals', compact('antecedente_dentals'))->setPaper('letter', 'portrait');
 
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
@@ -160,137 +159,43 @@ class ReporteController extends Controller
         $ancho = $canvas->get_width();
         $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
 
-        return $pdf->stream('planilla_pagos.pdf');
+        return $pdf->stream('examen_clinicos.pdf');
     }
 
-
-    public function g_lotes_terrenos()
+    public function pacientes_doctor()
     {
-        return Inertia::render("Reportes/GLotesTerrenos");
+        return Inertia::render("Reportes/PacientesDoctor");
     }
 
-    public function r_g_lotes_terrenos(Request $request)
+    public function r_pacientes_doctor(Request $request)
     {
-        $urbanizacion_id =  $request->urbanizacion_id;
+        $user_id =  $request->user_id;
+        $fecha_ini =  $request->fecha_ini;
+        $fecha_fin =  $request->fecha_fin;
 
-        $urbanizacions = Urbanizacion::select("urbanizacions.*");
+        $data = [];
 
-        if ($urbanizacion_id != 'todos') {
-            $urbanizacions->where("id", $urbanizacion_id);
+        $users = User::select("users.*");
+
+        if ($user_id != 'todos') {
+            $users->where("id", $user_id);
         }
 
-        $urbanizacions = $urbanizacions->get();
-        $categories = [];
-        $series = [
-            [
-                "name" => "Disponibles",
-                "data" => [],
-                "color" => "#06bb7f",
-            ],
-            [
-                "name" => "Ocupados",
-                "data" => [],
-                "color" => "#e44a36",
-            ]
-        ];
-        foreach ($urbanizacions as $item) {
-            $categories[] = $item->nombre;
+        $users = $users->get();
 
-            $disponibles = Lote::where("urbanizacion_id", $item->id)->where("vendido", 0)->count();
-            $ocupados = Lote::where("urbanizacion_id", $item->id)->where("vendido", 1)->count();
-            $series[0]["data"][] = $disponibles;
-            $series[1]["data"][] = $ocupados;
+        foreach ($users as $user) {
+            $c_pacientes = Paciente::where("user_id", $user->id);
+
+            if ($fecha_ini && $fecha_fin) {
+                $c_pacientes->whereBetween("fecha_registro", [$fecha_ini, $fecha_fin]);
+            }
+
+            $c_pacientes = $c_pacientes->count();
+            $data[] = [$user->full_name, (float)$c_pacientes];
         }
 
         return response()->JSON([
-            "categories" => $categories,
-            "series" => $series,
+            "data" => $data
         ]);
-    }
-
-    public function r_pdf_lotes_terrenos(Request $request)
-    {
-        $urbanizacion_id =  $request->urbanizacion_id;
-
-        $urbanizacions = Urbanizacion::select("urbanizacions.*");
-
-        if ($urbanizacion_id != 'todos') {
-            $urbanizacions->where("id", $urbanizacion_id);
-        }
-
-        $urbanizacions = $urbanizacions->get();
-
-        $pdf = PDF::loadView('reportes.pdf_lotes_terrenos', compact('urbanizacions'))->setPaper('letter', 'portrait');
-
-        // ENUMERAR LAS PÁGINAS USANDO CANVAS
-        $pdf->output();
-        $dom_pdf = $pdf->getDomPDF();
-        $canvas = $dom_pdf->get_canvas();
-        $alto = $canvas->get_height();
-        $ancho = $canvas->get_width();
-        $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
-
-        return $pdf->stream('lotes_terrenos.pdf');
-    }
-
-    public function g_venta_lotes()
-    {
-        return Inertia::render("Reportes/GVentaLotes");
-    }
-
-    public function r_g_venta_lotes(Request $request)
-    {
-        $urbanizacion_id =  $request->urbanizacion_id;
-
-        $urbanizacions = Urbanizacion::select("urbanizacions.*");
-
-        if ($urbanizacion_id != 'todos') {
-            $urbanizacions->where("id", $urbanizacion_id);
-        }
-
-        $urbanizacions = $urbanizacions->get();
-        $categories = [];
-        $series = [
-            [
-                "name" => "Total",
-                "data" => [],
-                "color" => "#06bb7f",
-            ],
-        ];
-        foreach ($urbanizacions as $item) {
-            $categories[] = $item->nombre;
-            $total = VentaLote::where("urbanizacion_id", $item->id)->sum("total_venta");
-            $series[0]["data"][] = (float)$total;
-        }
-
-        return response()->JSON([
-            "categories" => $categories,
-            "series" => $series,
-        ]);
-    }
-
-    public function r_pdf_venta_lotes(Request $request)
-    {
-        $urbanizacion_id =  $request->urbanizacion_id;
-
-        $urbanizacions = Urbanizacion::select("urbanizacions.*");
-
-        if ($urbanizacion_id != 'todos') {
-            $urbanizacions->where("id", $urbanizacion_id);
-        }
-
-        $urbanizacions = $urbanizacions->get();
-
-        $pdf = PDF::loadView('reportes.venta_lotes', compact('urbanizacions'))->setPaper('letter', 'portrait');
-
-        // ENUMERAR LAS PÁGINAS USANDO CANVAS
-        $pdf->output();
-        $dom_pdf = $pdf->getDomPDF();
-        $canvas = $dom_pdf->get_canvas();
-        $alto = $canvas->get_height();
-        $ancho = $canvas->get_width();
-        $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
-
-        return $pdf->stream('venta_lotes.pdf');
     }
 }

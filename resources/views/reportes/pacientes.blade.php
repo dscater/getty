@@ -3,17 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>LotesTerrenos</title>
+    <title>Pacientes</title>
     <style type="text/css">
         * {
             font-family: sans-serif;
         }
 
         @page {
-            margin-top: 1cm;
-            margin-bottom: 1cm;
-            margin-left: 1.5cm;
-            margin-right: 1cm;
+            margin-top: 1.5cm;
+            margin-bottom: 0.3cm;
+            margin-left: 0.3cm;
+            margin-right: 0.3cm;
         }
 
         table {
@@ -138,90 +138,78 @@
             color: white;
         }
 
-        .derecha {
-            text-align: right;
-        }
-
-        .bold {
-            font-weight: bold;
-        }
+        .txt_rojo {}
 
         .img_celda img {
             width: 45px;
-        }
-
-        .page-break {
-            page-break-after: always;
         }
     </style>
 </head>
 
 <body>
     @inject('configuracion', 'App\Models\Configuracion')
-    @php
-        $contador = 0;
-    @endphp
-    @foreach ($urbanizacions as $urbanizacion)
-        <div class="encabezado">
-            <div class="logo">
-                <img src="{{ $configuracion->first()->logo_b64 }}">
-            </div>
-            <h2 class="titulo">
-                {{ $configuracion->first()->razon_social }}
-            </h2>
-            <h4 class="texto">VENTA DE LOTES</h4>
-            <h4 class="fecha">Expedido: {{ date('d-m-Y') }}</h4>
+    <div class="encabezado">
+        <div class="logo">
+            <img src="{{ $configuracion->first()->logo_b64 }}">
         </div>
-
-        <h4>{{ $urbanizacion->nombre }}</h4>
-        @php
-            $venta_lotes = App\Models\VentaLote::where('urbanizacion_id', $urbanizacion->id)->get();
-        @endphp
-        <table border="1">
-            <thead>
+        <h2 class="titulo">
+            {{ $configuracion->first()->razon_social }}
+        </h2>
+        <h4 class="texto">LISTA DE PACIENTES</h4>
+        <h4 class="fecha">Expedido: {{ date('d-m-Y') }}</h4>
+    </div>
+    <table border="1">
+        <thead class="bg-principal">
+            <tr>
+                <th rowspan="2" width="3%">N°</th>
+                <th rowspan="2">PATERNO</th>
+                <th rowspan="2">MATERNO</th>
+                <th rowspan="2">NOMBRE(S)</th>
+                <th rowspan="2">C.I.</th>
+                <th rowspan="2">FECHA NACIMIENTO</th>
+                <th rowspan="2">DIRECCIÓN</th>
+                <th rowspan="2">TELÉFONO/CELULAR</th>
+                <th rowspan="2">NOMBRE PROGENITOR</th>
+                <th colspan="7" class="centreado">CONTACTO PARA CUENTAS</th>
+                <th width="9%" rowspan="2">FECHA DE REGISTRO</th>
+            </tr>
+            <tr>
+                <th>SEÑOR(A)</th>
+                <th>DIRECCIÓN COMPLETO</th>
+                <th>TELÉFONO DOMICILIO</th>
+                <th>TELÉFONO CONTACTO</th>
+                <th>CELULAR</th>
+                <th>FAX</th>
+                <th>CORREO</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $cont = 1;
+            @endphp
+            @foreach ($pacientes as $paciente)
                 <tr>
-                    <th width="3%">N°</th>
-                    <th>MANZANO/LOTE</th>
-                    <th>TIPO DE PAGO</th>
-                    <th>TOTAL VENTA</th>
-                    <th>FECHA DE REGISTRO</th>
+                    <td class="centreado">{{ $cont++ }}</td>
+                    <td class="">{{ $paciente->paterno }}</td>
+                    <td class="">{{ $paciente->materno }}</td>
+                    <td class="">{{ $paciente->nombre }}</td>
+                    <td class="">{{ $paciente->full_ci }}</td>
+                    <td class="">{{ $paciente->fecha_nac_t }}</td>
+                    <td class="">{{ $paciente->dir }}</td>
+                    <td class="">{{ $paciente->fono }}</td>
+                    <td class="">{{ $paciente->nombre_proge }}</td>
+                    <td class="">{{ $paciente->senior }}</td>
+                    <td class="">{{ $paciente->dir_s }}</td>
+                    <td class="">{{ $paciente->fono_dom_s }}</td>
+                    <td class="">{{ $paciente->fono_trab_s }}</td>
+                    <td class="">{{ $paciente->cel_s }}</td>
+                    <td class="">{{ $paciente->fax_s }}</td>
+                    <td class="">{{ $paciente->correo_s }}</td>
+                    <td class="centreado">{{ $paciente->user->fecha_registro_t }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @php
-                    $cont = 1;
-                    $suma_total = 0;
-                @endphp
-                @forelse ($venta_lotes as $venta_lote)
-                    <tr>
-                        <td>{{ $cont++ }}</td>
-                        <td>{{ $venta_lote->manzano->nombre }}/{{ $venta_lote->lote->nombre }}</td>
-                        <td>{{ $venta_lote->tipo_pago }}</td>
-                        <td class="centreado">{{ $venta_lote->total_venta }}</td>
-                        <td>{{ $venta_lote->fecha_registro_t }}</td>
-                    </tr>
-                    @php
-                        $suma_total += (float) $venta_lote->total_venta;
-                    @endphp
-                @empty
-                    <tr>
-                        <td colspan="5" class="centreado">Sin registros</td>
-                    </tr>
-                @endforelse
-                <tr>
-                    <td colspan="3" class="derecha bold">TOTAL</td>
-                    <td class="centreado bold">{{ number_format($suma_total, 2, '.', ',') }}</td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-        @php
-            $contador++;
-        @endphp
-        @if ($contador < count($urbanizacions))
-            <div class="page-break"></div>
-        @endif
-    @endforeach
+            @endforeach
+        </tbody>
+    </table>
 </body>
 
 </html>

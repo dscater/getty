@@ -34,8 +34,32 @@ class UserController extends Controller
             "configuracions.destroy",
 
             "reportes.usuarios",
+            "reportes.pacientes",
+            "reportes.examen_clinicos",
+            "reportes.antecedente_dental",
+            "reportes.pacientes_doctor",
         ],
-        "DOCTOR ESPECIALISTA" => [],
+        "DOCTOR ESPECIALISTA" => [
+            "pacientes.index",
+            "pacientes.create",
+            "pacientes.edit",
+            "pacientes.destroy",
+
+            "examen_clinicos.index",
+            "examen_clinicos.create",
+            "examen_clinicos.edit",
+            "examen_clinicos.destroy",
+
+            "configuracions.index",
+            "configuracions.create",
+            "configuracions.edit",
+            "configuracions.destroy",
+
+            "reportes.pacientes",
+            "reportes.examen_clinicos",
+            "reportes.antecedente_dental",
+            "reportes.pacientes_doctor",
+        ],
     ];
 
     public static function getPermisosUser()
@@ -86,7 +110,7 @@ class UserController extends Controller
         }
 
         if (in_array('pacientes.index', self::$permisos[$tipo])) {
-            $pacientes = Paciente::count();
+            $pacientes = Paciente::where("user_id", Auth::user()->id)->count();
             $array_infos[] = [
                 'label' => 'PACIENTES',
                 'cantidad' => $pacientes,

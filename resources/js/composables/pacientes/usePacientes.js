@@ -28,9 +28,9 @@ const oPaciente = ref({
 
 export const usePacientes = () => {
     const { flash } = usePage().props;
-    const getPacientes = async () => {
+    const getPacientes = async (data) => {
         try {
-            const response = await axios.get(route("pacientes.listado"), {
+            const response = await axios.get(route("pacientes.listado", data), {
                 headers: { Accept: "application/json" },
             });
             return response.data.pacientes;
