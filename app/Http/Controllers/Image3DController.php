@@ -14,8 +14,7 @@ class Image3DController extends Controller
             'images.*' => 'required|image|mimes:jpg,jpeg,png,webp|min:1',
         ]);
 
-        // Subir imágenes
-        $path = public_path("imgs/examen_clinicos/");
+        // Cargar imágenes
         $images = [];
         foreach ($request->file('images') as $image) {
             $images[] = $image;
