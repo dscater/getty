@@ -52,6 +52,9 @@ const columns = [
         data: null,
         render: function (data, type, row) {
             return `
+                <button class="mx-0 rounded-0 btn btn-info imprimir" data-id="${
+                    row.id
+                }"><i class="fa fa-file-pdf"></i></button>
                 <button class="mx-0 rounded-0 btn btn-primary detalle" data-id="${
                     row.id
                 }"><i class="fa fa-id-card"></i></button>
@@ -72,6 +75,15 @@ const columns = [
 const loading = ref(false);
 
 const accionesRow = () => {
+    // imprimir
+    $("#table-examen_clinico").on("click", "button.imprimir", function (e) {
+        e.preventDefault();
+        let id = $(this).attr("data-id");
+        const url = route("reportes.r_examen_clinicos", {
+            examen_clinico_id: id,
+        });
+        window.open(url, "_blank");
+    });
     // detalle
     $("#table-examen_clinico").on("click", "button.detalle", function (e) {
         e.preventDefault();

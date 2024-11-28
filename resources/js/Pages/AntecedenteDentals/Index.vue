@@ -52,6 +52,9 @@ const columns = [
         data: null,
         render: function (data, type, row) {
             return `
+                <button class="mx-0 rounded-0 btn btn-info imprimir" data-id="${
+                    row.paciente_id
+                }"><i class="fa fa-file-pdf"></i></button>
                 <button class="mx-0 rounded-0 btn btn-primary detalle" data-id="${
                     row.id
                 }"><i class="fa fa-id-card"></i></button>
@@ -72,6 +75,15 @@ const columns = [
 const loading = ref(false);
 
 const accionesRow = () => {
+    // imprimir
+    $("#table-antecedente_dental").on("click", "button.imprimir", function (e) {
+        e.preventDefault();
+        let id = $(this).attr("data-id");
+        const url = route("reportes.r_antecedente_dental", {
+            paciente_id: id,
+        });
+        window.open(url, "_blank");
+    });
     // detalle
     $("#table-antecedente_dental").on("click", "button.detalle", function (e) {
         e.preventDefault();

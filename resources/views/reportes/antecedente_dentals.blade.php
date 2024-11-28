@@ -158,8 +158,31 @@
             page-break-after: always;
         }
 
-        .bold{
+        .bold {
             font-weight: bold;
+        }
+
+        .celdainfo {
+            border: solid 0.8px black;
+            border-radius: 2px;
+        }
+
+        .textoinfo {
+            padding: 0px;
+        }
+
+        .tableinfos {
+            border-collapse: separate;
+            border-spacing: 20px 0px;
+        }
+
+        .boder_bottom {
+            font-size: 9pt;
+            margin-left: 20px;
+            border-bottom: solid 1px black;
+            padding-bottom: 0px;
+            margin-bottom: 0px;
+            width: 158px;
         }
     </style>
 </head>
@@ -185,13 +208,13 @@
         </div>
 
 
-        <table>
+        <table class="tableinfos">
             <tbody>
                 <tr>
-                    <td class="izquierda bold">Paciente</td>
+                    <td class="izquierda bold textoinfo">PACIENTE</td>
                 </tr>
                 <tr>
-                    <td class="izquierda">{{ $antecedente_dental->paciente->full_name }}</td>
+                    <td class="izquierda celdainfo">{{ $antecedente_dental->paciente->full_name }}</td>
                 </tr>
             </tbody>
         </table>
@@ -200,15 +223,17 @@
         <table>
             <tbody>
                 <tr>
-                    <td colspan="4" class="bold">¿A TENIDO ALGUNA VEZ LESIONES EN LA CARA, EN LA
+                    <td colspan="3" class="izquierda bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;¿A TENIDO ALGUNA VEZ LESIONES EN LA CARA, EN LA
                         BOCA O EN LOS DIENTES?</td>
+                    <td class="celdainfo izquierda">{{ $antecedente_dental->lesiones_cara }}</td>
+                    <td></td>
                 </tr>
-                <tr>
-                    <td colspan="4">{{ $antecedente_dental->lesiones_cara }}</td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="bold">*OTRAS INFORMACIONES:</td>
-                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="bold izquierda boder_bottom">*OTRAS INFORMACIONES:</h4>
+        <table class="tableinfos">
+            <tbody>
                 <tr>
                     <td class="bold">CHUPARSE EL PULGAR U OTRO DEDO (EN EL
                         PASDO)</td>
@@ -220,10 +245,10 @@
                         ACTUALIDAD?</td>
                 </tr>
                 <tr>
-                    <td>{{ $antecedente_dental->ch_pulgar_pasado }}</td>
-                    <td>{{ $antecedente_dental->ch_dedo_actual }}</td>
-                    <td>{{ $antecedente_dental->respiracion_bucal }}</td>
-                    <td>{{ $antecedente_dental->muerde_unia }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->ch_pulgar_pasado }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->ch_dedo_actual }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->respiracion_bucal }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->muerde_unia }}</td>
                 </tr>
                 <tr>
                     <td class="bold">¿DESGASTA O RECHINA LOS DIENTES?</td>
@@ -234,10 +259,10 @@
                     <td class="bold">EN CASO AFIRMATIVO CONCRETE</td>
                 </tr>
                 <tr>
-                    <td>{{ $antecedente_dental->desgaste_dientes }}</td>
-                    <td>{{ $antecedente_dental->falta_permanente }}</td>
-                    <td>{{ $antecedente_dental->falta_alguno }}</td>
-                    <td>{{ $antecedente_dental->falta_alguno_d }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->desgaste_dientes }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->falta_permanente }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->falta_alguno }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->falta_alguno_d }}</td>
                 </tr>
                 <tr>
                     <td class="bold">¿TIENE ALGÚN ANTECEDENTE DE PROBLEMAS DE
@@ -250,10 +275,10 @@
                         ORTODONCIA?</td>
                 </tr>
                 <tr>
-                    <td>{{ $antecedente_dental->problema_cabeza }}</td>
-                    <td>{{ $antecedente_dental->examinado }}</td>
-                    <td>{{ $antecedente_dental->examinado_d }}</td>
-                    <td>{{ $antecedente_dental->aparatos }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->problema_cabeza }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->examinado }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->examinado_d }}</td>
+                    <td class="celdainfo">{{ $antecedente_dental->aparatos }}</td>
                 </tr>
                 <tr>
                     <td class="bold">EN CASO AFIRMATIVO, CUANDO?</td>
@@ -262,7 +287,12 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td>{{ $antecedente_dental->aparatos_d }}</td>
+                    <td class="celdainfo">
+                        @if ($antecedente_dental->aparatos_d)
+                            {{ $antecedente_dental->aparatos_d }}
+                        @else
+                            &nbsp;
+                        @endif
                     <td></td>
                     <td></td>
                     <td></td>

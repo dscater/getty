@@ -40,6 +40,7 @@
         }
 
         .titleInfo {
+            margin-left: 20px;
             font-size: 0.7em;
         }
 
@@ -159,6 +160,29 @@
         .nueva_pagina {
             page-break-after: always;
         }
+
+        .celdainfo {
+            border: solid 0.8px black;
+            border-radius: 2px;
+        }
+
+        .textoinfo {
+            padding: 0px;
+        }
+
+        .tableinfos {
+            border-collapse: separate;
+            border-spacing: 20px 0px;
+        }
+
+        .boder_bottom {
+            font-size: 9pt;
+            margin-left: 20px;
+            border-bottom: solid 1px black;
+            padding-bottom: 0px;
+            margin-bottom: 0px;
+            width: 158px;
+        }
     </style>
 </head>
 
@@ -183,22 +207,22 @@
         </div>
 
 
-        <table>
+        <table class="tableinfos">
             <tbody>
                 <tr>
-                    <td>Código</td>
-                    <td class="izquierda">Paciente</td>
+                    <td width=20%>CÓD. EXÁMEN</td>
+                    <td class="centreado">PACIENTE</td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->cod }}</td>
-                    <td class="izquierda">{{ $examen_clinico->paciente->full_name }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->cod }}</td>
+                    <td class="centreado celdainfo">{{ $examen_clinico->paciente->full_name }}</td>
                 </tr>
             </tbody>
         </table>
 
         <!-- info 1 -->
         <h4 class="titleInfo">EXAMEN CLÍNICO EXTRAORAL</h4>
-        <table>
+        <table class="tableinfos">
             <tbody>
                 <tr>
                     <td>SIMETRÍA FACIAL</td>
@@ -207,10 +231,10 @@
                     <td>RESPIRACIÓN</td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->simetria_facial }}</td>
-                    <td>{{ $examen_clinico->diccion }}</td>
-                    <td>{{ $examen_clinico->patron_facial }}</td>
-                    <td>{{ $examen_clinico->respiracion }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->simetria_facial }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->diccion }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->patron_facial }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->respiracion }}</td>
                 </tr>
                 <tr>
                     <td>PERFIL</td>
@@ -219,10 +243,10 @@
                     <td>MAXILAR SUPERIOR</td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->perfil }}</td>
-                    <td>{{ $examen_clinico->relacion_labial }}</td>
-                    <td>{{ $examen_clinico->labios }}</td>
-                    <td>{{ $examen_clinico->maxilar_superior }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->perfil }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->relacion_labial }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->labios }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->maxilar_superior }}</td>
                 </tr>
                 <tr>
                     <td>DEGLUCIÓN</td>
@@ -231,16 +255,16 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->deglucion }}</td>
-                    <td>{{ $examen_clinico->lengua_deglucion }}</td>
-                    <td>{{ $examen_clinico->habito_bucal }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->deglucion }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->lengua_deglucion }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->habito_bucal }}</td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
         <!-- info 2 -->
         <h4 class="titleInfo">EXAMEN CLÍNICO INTRAORAL</h4>
-        <table>
+        <table class="tableinfos">
             <tbody>
                 <tr>
                     <td>DENTICIÓN</td>
@@ -249,10 +273,10 @@
                     <td>SALUD DENTAL</td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->denticion }}</td>
-                    <td>{{ $examen_clinico->overjet }}</td>
-                    <td>{{ $examen_clinico->higiene_bucal }}</td>
-                    <td>{{ $examen_clinico->salud_dental }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->denticion }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->overjet }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->higiene_bucal }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->salud_dental }}</td>
                 </tr>
                 <tr>
                     <td>RELACIÓN MOLAR</td>
@@ -261,10 +285,10 @@
                     <td>MORDIDA CRUZADA</td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->relacion_molar }}</td>
-                    <td>{{ $examen_clinico->relacion_canina }}</td>
-                    <td>{{ $examen_clinico->amigdalas }}</td>
-                    <td>{{ $examen_clinico->mordida_cruzada }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->relacion_molar }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->relacion_canina }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->amigdalas }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->mordida_cruzada }}</td>
                 </tr>
                 <tr>
                     <td>SUPERIOR</td>
@@ -273,21 +297,21 @@
                     <td>MM INFERIOR</td>
                 </tr>
                 <tr>
-                    <td>{{ $examen_clinico->linea_sup }}</td>
-                    <td>{{ $examen_clinico->linea_sup_mm }}</td>
-                    <td>{{ $examen_clinico->linea_inf }}</td>
-                    <td>{{ $examen_clinico->linea_inf_mm }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->linea_sup }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->linea_sup_mm }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->linea_inf }}</td>
+                    <td class="celdainfo">{{ $examen_clinico->linea_inf_mm }}</td>
                 </tr>
             </tbody>
         </table>
         <!-- info 3 -->
-        <table>
+        <table class="tableinfos">
             <tbody>
                 <tr>
-                    <td class="izquierda">Observación</td>
+                    <td class="izquierda">OBSERVACIÓN</td>
                 </tr>
                 <tr>
-                    <td class="izquierda">{{ $examen_clinico->observacion }}</td>
+                    <td class="izquierda celdainfo">{{ $examen_clinico->observacion }}</td>
                 </tr>
             </tbody>
         </table>
