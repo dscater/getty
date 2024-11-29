@@ -64,7 +64,7 @@ class ExamenClinico extends Model
         $ultimo = ExamenClinico::get()->last();
         $nro = 1;
         if ($ultimo) {
-            $nro = (int)$ultimo->nro_cod + 1;
+            $nro = (int)$ultimo->nro + 1;
         }
 
         $codigo = "EC." . $nro;

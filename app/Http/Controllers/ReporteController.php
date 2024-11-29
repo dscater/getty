@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AntecedenteDental;
 use App\Models\Cliente;
+use App\Models\Consulta;
 use App\Models\ExamenClinico;
 use App\Models\Lote;
 use App\Models\Paciente;
@@ -62,13 +63,16 @@ class ReporteController extends Controller
 
         if ($paciente_id != 'todos') {
             $pacientes->where("id", $paciente_id);
+        } else {
+            if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+                $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+                $pacientes->whereIn("pacientes.id", $id_pacientes);
+            }
         }
 
         if ($fecha_ini && $fecha_fin) {
             $pacientes->whereBetween("fecha_registro", [$fecha_ini, $fecha_fin]);
         }
-
-        $pacientes->where("user_id", Auth::user()->id);
 
         $pacientes = $pacientes->get();
 
@@ -102,15 +106,17 @@ class ReporteController extends Controller
         if ($examen_clinico_id != 'todos') {
             $examen_clinicos->where("examen_clinicos.id", $examen_clinico_id);
         } else {
-            $examen_clinicos->where("pacientes.user_id", Auth::user()->id);
-
-            if ($fecha_ini && $fecha_fin) {
-                $examen_clinicos->whereBetween("examen_clinicos.fecha_registro", [$fecha_ini, $fecha_fin]);
+            if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+                $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+                $examen_clinicos->whereIn("pacientes.id", $id_pacientes);
             }
         }
 
-        $examen_clinicos = $examen_clinicos->get();
+        if ($fecha_ini && $fecha_fin) {
+            $examen_clinicos->whereBetween("examen_clinicos.fecha_registro", [$fecha_ini, $fecha_fin]);
+        }
 
+        $examen_clinicos = $examen_clinicos->get();
 
         $pdf = PDF::loadView('reportes.examen_clinicos', compact('examen_clinicos'))->setPaper('letter', 'portrait');
 
@@ -141,10 +147,13 @@ class ReporteController extends Controller
         if ($paciente_id != 'todos') {
             $antecedente_dentals->where("antecedente_dentals.paciente_id", $paciente_id);
         } else {
-            $antecedente_dentals->where("pacientes.user_id", Auth::user()->id);
-            if ($fecha_ini && $fecha_fin) {
-                $antecedente_dentals->whereBetween("antecedente_dentals.fecha_registro", [$fecha_ini, $fecha_fin]);
+            if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+                $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+                $antecedente_dentals->whereIn("pacientes.id", $id_pacientes);
             }
+        }
+        if ($fecha_ini && $fecha_fin) {
+            $antecedente_dentals->whereBetween("antecedente_dentals.fecha_registro", [$fecha_ini, $fecha_fin]);
         }
 
         $antecedente_dentals = $antecedente_dentals->get();
@@ -159,7 +168,7 @@ class ReporteController extends Controller
         $ancho = $canvas->get_width();
         $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 9, array(0, 0, 0));
 
-        return $pdf->stream('examen_clinicos.pdf');
+        return $pdf->stream('antecedentes.pdf');
     }
 
     public function pacientes_doctor()
@@ -175,7 +184,7 @@ class ReporteController extends Controller
 
         $data = [];
 
-        $users = User::select("users.*");
+        $users = User::select("users.*")->where("id", "!=", 1);
 
         if ($user_id != 'todos') {
             $users->where("id", $user_id);
@@ -184,13 +193,19 @@ class ReporteController extends Controller
         $users = $users->get();
 
         foreach ($users as $user) {
-            $c_pacientes = Paciente::where("user_id", $user->id);
+            $columna = "general_id";
+            if ($user->tipo == 'DOCTOR ESPECIALISTA') {
+                $columna = "especialista_id";
+            }
+            $c_pacientes = Paciente::select("pacientes.*")
+                ->join("consultas", "consultas.paciente_id", "=", "pacientes.id");
+            $c_pacientes->where($columna, $user->id);
 
             if ($fecha_ini && $fecha_fin) {
                 $c_pacientes->whereBetween("fecha_registro", [$fecha_ini, $fecha_fin]);
             }
 
-            $c_pacientes = $c_pacientes->count();
+            $c_pacientes = $c_pacientes->distinct("pacientes.id")->count();
             $data[] = [$user->full_name, (float)$c_pacientes];
         }
 

@@ -16,24 +16,29 @@ const props = defineProps({
 const { oPaciente, limpiarPaciente } = usePacientes();
 const accion = ref(props.accion_dialog);
 const dialog = ref(props.open_dialog);
-let form = useForm(oPaciente.value);
-let switcheryInstance = null;
+let form = useForm(oPaciente);
 watch(
     () => props.open_dialog,
     async (newValue) => {
         dialog.value = newValue;
         if (dialog.value) {
             const accesoCheckbox = $("#acceso");
-            if (oPaciente.value.acceso == 1) {
+            if (oPaciente.acceso == 1) {
                 accesoCheckbox.prop("checked", false).trigger("click");
             } else {
                 accesoCheckbox.prop("checked", true).trigger("click");
             }
+            cargarGenerals();
+            cargarEspecialistas();
 
             document
                 .getElementsByTagName("body")[0]
                 .classList.add("modal-open");
-            form = useForm(oPaciente.value);
+            form = useForm(oPaciente);
+
+            if (form.id == 0) {
+                agregarFila();
+            }
         }
     }
 );
@@ -46,7 +51,6 @@ watch(
 
 const { flash } = usePage().props;
 
-const listTipos = ["DOCTOR GENERAL", "DOCTOR ESPECIALISTA"];
 const listExpedido = [
     { value: "LP", label: "La Paz" },
     { value: "CB", label: "Cochabamba" },
@@ -58,6 +62,9 @@ const listExpedido = [
     { value: "PD", label: "Pando" },
     { value: "BN", label: "Beni" },
 ];
+
+const listGenerals = ref([]);
+const listEspecialistas = ref([]);
 
 const foto = ref(null);
 
@@ -123,6 +130,21 @@ const enviarFormulario = () => {
 };
 
 const emits = defineEmits(["cerrar-dialog", "envio-formulario"]);
+const cargarGenerals = () => {
+    axios
+        .get(route("usuarios.byTipo", { tipo: "DOCTOR GENERAL" }))
+        .then((response) => {
+            listGenerals.value = response.data.usuarios;
+        });
+};
+
+const cargarEspecialistas = () => {
+    axios
+        .get(route("usuarios.byTipo", { tipo: "DOCTOR ESPECIALISTA" }))
+        .then((response) => {
+            listEspecialistas.value = response.data.usuarios;
+        });
+};
 
 watch(dialog, (newVal) => {
     if (!newVal) {
@@ -133,6 +155,24 @@ watch(dialog, (newVal) => {
 const cerrarDialog = () => {
     dialog.value = false;
     document.getElementsByTagName("body")[0].classList.remove("modal-open");
+};
+
+const agregarFila = () => {
+    form.consultas.push({
+        id: 0,
+        paciente_id: "",
+        general_id: "",
+        especialista_id: "",
+        motivo: "",
+    });
+};
+
+const eliminarFila = (index) => {
+    let id = form.consultas[index].id;
+    if (id != 0) {
+        form.eliminados.push(id);
+    }
+    form.consultas.splice(index, 1);
 };
 
 onMounted(() => {
@@ -376,7 +416,7 @@ onMounted(() => {
                                 </ul>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col-12">
                                 <h4>CONTACTO PARA CUENTAS</h4>
                             </div>
@@ -516,6 +556,102 @@ onMounted(() => {
                                 </ul>
                             </div>
                         </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h4>CONSULTA</h4>
+                            </div>
+                            <div class="col-12">
+                                <div
+                                    class="row fila"
+                                    v-for="(item, index) in form.consultas"
+                                    :class="[index % 2 == 0 ? 'bg1' : 'bg2']"
+                                >
+                                    <div class="col-md-4">
+                                        <label
+                                            >Seleccionar doctor general*</label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            v-model="item.general_id"
+                                        >
+                                            <option value="">
+                                                - Seleccione -
+                                            </option>
+                                            <option
+                                                v-for="item in listGenerals"
+                                                :value="item.id"
+                                            >
+                                                {{ item.full_name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label
+                                            >Seleccionar doctor
+                                            especialista*</label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            v-model="item.especialista_id"
+                                        >
+                                            <option value="">
+                                                - Seleccione -
+                                            </option>
+                                            <option
+                                                v-for="item in listEspecialistas"
+                                                :value="item.id"
+                                            >
+                                                {{ item.full_name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Motivo de Consulta*</label>
+                                        <textarea
+                                            class="form-control"
+                                            rows="1"
+                                            v-model="item.motivo"
+                                        ></textarea>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger btn-sm btn_quitar"
+                                        @click.prevent="eliminarFila(index)"
+                                    >
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button
+                                            type="button"
+                                            class="btn btn-outline-primary w-100 btn-sm"
+                                            @click="agregarFila"
+                                        >
+                                            <i class="fa fa-plus"
+                                                >Agregar consulta</i
+                                            >
+                                        </button>
+                                    </div>
+                                    <div
+                                        class="col-12"
+                                        v-if="
+                                            form.errors &&
+                                            form.errors?.consultas
+                                        "
+                                    >
+                                        <p
+                                            class="text-danger w-100 text-center"
+                                        >
+                                            {{ form.errors?.consultas }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <hr />
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label
@@ -582,3 +718,24 @@ onMounted(() => {
         </div>
     </div>
 </template>
+<style scoped>
+.fila {
+    position: relative;
+    padding-bottom: 15px;
+    padding-top: 10px;
+}
+.btn_quitar {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    width: 32px;
+    padding: 5px 0px;
+    font-size: 0.8em;
+}
+.row.bg1 {
+    background-color: rgb(234, 243, 250);
+}
+.row.bg2 {
+    background-color: rgb(234, 255, 237);
+}
+</style>

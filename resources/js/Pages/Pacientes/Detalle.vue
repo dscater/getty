@@ -16,7 +16,7 @@ const props = defineProps({
 const { oPaciente, limpiarPaciente } = usePacientes();
 const accion = ref(props.accion_dialog);
 const dialog = ref(props.open_dialog);
-let form = useForm(oPaciente.value);
+let form = useForm(oPaciente);
 let switcheryInstance = null;
 watch(
     () => props.open_dialog,
@@ -24,7 +24,7 @@ watch(
         dialog.value = newValue;
         if (dialog.value) {
             const accesoCheckbox = $("#acceso");
-            if (oPaciente.value.acceso == 1) {
+            if (oPaciente.acceso == 1) {
                 accesoCheckbox.prop("checked", false).trigger("click");
             } else {
                 accesoCheckbox.prop("checked", true).trigger("click");
@@ -33,7 +33,7 @@ watch(
             document
                 .getElementsByTagName("body")[0]
                 .classList.add("modal-open");
-            form = useForm(oPaciente.value);
+            form = useForm(oPaciente);
         }
     }
 );
@@ -168,7 +168,7 @@ onMounted(() => {
                             {{ form.nombre_proge }}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-12">
                             <h4>CONTACTO PARA CUENTAS</h4>
                         </div>
@@ -199,6 +199,36 @@ onMounted(() => {
                         <div class="col-md-4">
                             <label>Correo electrónico</label>
                             {{ form.correo_s }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h4>CONSULTA</h4>
+                        </div>
+                        <div class="col-12">
+                            <div
+                                class="row fila"
+                                v-for="(item, index) in form.consultas"
+                                :class="[index % 2 == 0 ? 'bg1' : 'bg2']"
+                            >
+                                <div class="col-md-4">
+                                    <label>Doctor general</label>
+                                    {{ item.general.full_name }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label
+                                        >Doctor especialist*</label
+                                    >
+                                    {{ item.especialista.full_name }}
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Motivo de Consulta</label>
+                                    {{ item.motivo }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr />
                         </div>
                     </div>
                     <div class="row">
@@ -237,7 +267,19 @@ label {
 .col-md-4 {
     margin-bottom: 10px;
 }
-img{
+img {
     max-width: 100px;
+}
+
+.fila {
+    position: relative;
+    padding-bottom: 15px;
+    padding-top: 10px;
+}
+.row.bg1 {
+    background-color: rgb(234, 243, 250);
+}
+.row.bg2 {
+    background-color: rgb(234, 255, 237);
 }
 </style>

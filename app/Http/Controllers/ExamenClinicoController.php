@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consulta;
 use App\Models\ExamenClinico;
 use App\Models\ExamenImagen;
 use App\Models\HistorialAccion;
@@ -35,7 +36,10 @@ class ExamenClinicoController extends Controller
         $examen_clinicos = ExamenClinico::with(["paciente"])->select("examen_clinicos.*");
 
         $examen_clinicos->join("pacientes", "pacientes.id", "=", "examen_clinicos.paciente_id");
-        $examen_clinicos->where("pacientes.user_id", Auth::user()->id);
+        if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+            $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+            $examen_clinicos->whereIn("pacientes.id", $id_pacientes);
+        }
 
         $examen_clinicos = $examen_clinicos->get();
         return response()->JSON([
@@ -48,7 +52,10 @@ class ExamenClinicoController extends Controller
         // Log::debug($request);
         $examen_clinicos = ExamenClinico::with(["paciente"])->select("examen_clinicos.*");
         $examen_clinicos->join("pacientes", "pacientes.id", "=", "examen_clinicos.paciente_id");
-        $examen_clinicos->where("pacientes.user_id", Auth::user()->id);
+        if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+            $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+            $examen_clinicos->whereIn("pacientes.id", $id_pacientes);
+        }
         $examen_clinicos = $examen_clinicos->get();
         return response()->JSON(["data" => $examen_clinicos]);
     }

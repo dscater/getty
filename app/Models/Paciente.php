@@ -29,7 +29,8 @@ class Paciente extends Model
         "correo_s",
         "agradecer",
         "nom_edad_hmnos",
-        "user_id"
+        "user_id",
+        "fecha_registro"
     ];
 
     protected $appends = ["url_foto", "foto_b64", "full_name", "full_ci", "fecha_registro_t"];
@@ -52,16 +53,16 @@ class Paciente extends Model
     public function getUrlFotoAttribute()
     {
         if ($this->foto) {
-            return asset("imgs/users/" . $this->foto);
+            return asset("imgs/pacientes/" . $this->foto);
         }
-        return asset("imgs/users/default.png");
+        return asset("imgs/pacientes/default.png");
     }
 
     public function getFotoB64Attribute()
     {
-        $path = public_path("imgs/users/" . $this->foto);
+        $path = public_path("imgs/pacientes/" . $this->foto);
         if (!$this->foto || !file_exists($path)) {
-            $path = public_path("imgs/users/default.png");
+            $path = public_path("imgs/pacientes/default.png");
         }
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
@@ -72,5 +73,10 @@ class Paciente extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function consultas()
+    {
+        return $this->hasMany(Consulta::class, 'paciente_id');
     }
 }

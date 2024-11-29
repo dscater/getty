@@ -152,7 +152,7 @@ onMounted(() => {
 }
 
 .login-container {
-    background-color: #0077ffb6 !important;
+    background-color: #2f9be4b6 !important;
     padding: 10px 20px !important;
     border-radius: 10px;
 }
@@ -161,7 +161,12 @@ onMounted(() => {
     width: 100%;
 }
 
+.login-cover-img {
+    background-image: url("/imgs/fondo.jpg");
+    background-size: cover;
+}
+
 .login-cover .login-cover-bg {
-    background-image: url("/imgs/bglogindark.png");
+    background: rgba(129, 185, 238, 0.733);
 }
 </style>

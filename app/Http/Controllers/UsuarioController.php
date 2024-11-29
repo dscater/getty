@@ -50,7 +50,7 @@ class UsuarioController extends Controller
 
     public function listado()
     {
-        $usuarios = User::all();
+        $usuarios = User::where("id", "!=", 1)->get();
         return response()->JSON([
             "usuarios" => $usuarios
         ]);

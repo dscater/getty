@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AntecedenteDental;
+use App\Models\Consulta;
 use App\Models\HistorialAccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,10 @@ class AntecedenteDentalController extends Controller
     {
         $antecedente_dentals = AntecedenteDental::with(["paciente"])->select("antecedente_dentals.*");
         $antecedente_dentals->join("pacientes", "pacientes.id", "=", "antecedente_dentals.paciente_id");
-        $antecedente_dentals->where("pacientes.user_id", Auth::user()->id);
+        if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+            $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+            $antecedente_dentals->whereIn("pacientes.id", $id_pacientes);
+        }
         $antecedente_dentals = $antecedente_dentals->get();
         return response()->JSON([
             "antecedente_dentals" => $antecedente_dentals
@@ -44,7 +48,12 @@ class AntecedenteDentalController extends Controller
         // Log::debug($request);
         $antecedente_dentals = AntecedenteDental::with(["paciente"])->select("antecedente_dentals.*");
         $antecedente_dentals->join("pacientes", "pacientes.id", "=", "antecedente_dentals.paciente_id");
-        $antecedente_dentals->where("pacientes.user_id", Auth::user()->id);
+
+
+        if (Auth::user()->tipo == 'DOCTOR ESPECIALISTA') {
+            $id_pacientes = Consulta::where("especialista_id", Auth::user()->id)->distinct("paciente_id")->pluck("paciente_id")->toArray();
+            $antecedente_dentals->whereIn("pacientes.id", $id_pacientes);
+        }
         $antecedente_dentals = $antecedente_dentals->get();
         return response()->JSON(["data" => $antecedente_dentals]);
     }

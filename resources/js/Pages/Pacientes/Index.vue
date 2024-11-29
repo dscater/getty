@@ -1,28 +1,13 @@
-<script>
-const breadbrums = [
-    {
-        title: "Inicio",
-        disabled: false,
-        url: route("inicio"),
-        name_url: "inicio",
-    },
-    {
-        title: "Pacientes",
-        disabled: false,
-        url: "",
-        name_url: "",
-    },
-];
-</script>
 <script setup>
 import { useApp } from "@/composables/useApp";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import { usePacientes } from "@/composables/pacientes/usePacientes";
 import { initDataTable } from "@/composables/datatable.js";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import PanelToolbar from "@/Components/PanelToolbar.vue";
 import Formulario from "./Formulario.vue";
 import Detalle from "./Detalle.vue";
+const { auth } = usePage().props;
 const { setLoading } = useApp();
 onMounted(() => {
     setTimeout(() => {
@@ -65,10 +50,11 @@ const columns = [
         title: "ACCIONES",
         data: null,
         render: function (data, type, row) {
-            return `
-                <button class="mx-0 rounded-0 btn btn-primary detalle" data-id="${
-                    row.id
-                }"><i class="fa fa-id-card"></i></button>
+            let buttons = `<button class="mx-0 rounded-0 btn btn-primary detalle" data-id="${row.id}"><i class="fa fa-id-card"></i></button>
+            `;
+            if (auth?.user.tipo == "DOCTOR GENERAL") {
+                buttons = ` 
+                
                 <button class="mx-0 rounded-0 btn btn-warning editar" data-id="${
                     row.id
                 }"><i class="fa fa-edit"></i></button>
@@ -78,8 +64,10 @@ const columns = [
                  data-url="${route(
                      "pacientes.destroy",
                      row.id
-                 )}"><i class="fa fa-trash"></i></button>
-            `;
+                 )}"><i class="fa fa-trash"></i></button>`;
+            }
+
+            return buttons;
         },
     },
 ];
@@ -186,6 +174,7 @@ onBeforeUnmount(() => {
                 <div class="panel-heading">
                     <h4 class="panel-title btn-nuevo">
                         <button
+                            v-if="auth?.user.tipo == 'DOCTOR GENERAL'"
                             type="button"
                             class="btn btn-primary"
                             @click="agregarRegistro"

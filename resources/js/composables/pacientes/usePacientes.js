@@ -1,8 +1,8 @@
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, reactive } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
-const oPaciente = ref({
+const oPaciente = reactive({
     id: 0,
     nombre: "",
     paterno: "",
@@ -23,6 +23,8 @@ const oPaciente = ref({
     correo_s: "",
     agradecer: "",
     nom_edad_hmnos: "",
+    consultas: [],
+    eliminados: [],
     _method: "POST",
 });
 
@@ -158,57 +160,61 @@ export const usePacientes = () => {
 
     const setPaciente = (item = null, foto = false) => {
         if (item) {
-            oPaciente.value.id = item.id;
-            oPaciente.value.nombre = item.nombre;
-            oPaciente.value.paterno = item.paterno;
-            oPaciente.value.materno = item.materno;
-            oPaciente.value.ci = item.ci;
-            oPaciente.value.ci_exp = item.ci_exp;
-            oPaciente.value.fecha_nac = item.fecha_nac;
-            oPaciente.value.dir = item.dir;
-            oPaciente.value.fono = item.fono;
-            oPaciente.value.foto = item.foto;
-            oPaciente.value.nombre_proge = item.nombre_proge;
-            oPaciente.value.senior = item.senior;
-            oPaciente.value.dir_s = item.dir_s;
-            oPaciente.value.fono_dom_s = item.fono_dom_s;
-            oPaciente.value.fono_trab_s = item.fono_trab_s;
-            oPaciente.value.cel_s = item.cel_s;
-            oPaciente.value.fax_s = item.fax_s;
-            oPaciente.value.correo_s = item.correo_s;
-            oPaciente.value.agradecer = item.agradecer;
-            oPaciente.value.nom_edad_hmnos = item.nom_edad_hmnos;
+            oPaciente.id = item.id;
+            oPaciente.nombre = item.nombre;
+            oPaciente.paterno = item.paterno;
+            oPaciente.materno = item.materno;
+            oPaciente.ci = item.ci;
+            oPaciente.ci_exp = item.ci_exp;
+            oPaciente.fecha_nac = item.fecha_nac;
+            oPaciente.dir = item.dir;
+            oPaciente.fono = item.fono;
+            oPaciente.foto = item.foto;
+            oPaciente.nombre_proge = item.nombre_proge;
+            oPaciente.senior = item.senior;
+            oPaciente.dir_s = item.dir_s;
+            oPaciente.fono_dom_s = item.fono_dom_s;
+            oPaciente.fono_trab_s = item.fono_trab_s;
+            oPaciente.cel_s = item.cel_s;
+            oPaciente.fax_s = item.fax_s;
+            oPaciente.correo_s = item.correo_s;
+            oPaciente.agradecer = item.agradecer;
+            oPaciente.nom_edad_hmnos = item.nom_edad_hmnos;
+            oPaciente.consultas = item.consultas;
             if (foto) {
-                oPaciente.value.url_foto = item.url_foto;
+                oPaciente.url_foto = item.url_foto;
             }
-            oPaciente.value._method = "PUT";
+            oPaciente.eliminados = [];
+            oPaciente._method = "PUT";
             return oPaciente;
         }
         return false;
     };
 
     const limpiarPaciente = () => {
-        oPaciente.value.id = 0;
-        oPaciente.value.nombre = "";
-        oPaciente.value.paterno = "";
-        oPaciente.value.materno = "";
-        oPaciente.value.ci = "";
-        oPaciente.value.ci_exp = "";
-        oPaciente.value.fecha_nac = "";
-        oPaciente.value.dir = "";
-        oPaciente.value.fono = "";
-        oPaciente.value.foto = "";
-        oPaciente.value.nombre_proge = "";
-        oPaciente.value.senior = "";
-        oPaciente.value.dir_s = "";
-        oPaciente.value.fono_dom_s = "";
-        oPaciente.value.fono_trab_s = "";
-        oPaciente.value.cel_s = "";
-        oPaciente.value.fax_s = "";
-        oPaciente.value.correo_s = "";
-        oPaciente.value.agradecer = "";
-        oPaciente.value.nom_edad_hmnos = "";
-        oPaciente.value._method = "POST";
+        oPaciente.id = 0;
+        oPaciente.nombre = "";
+        oPaciente.paterno = "";
+        oPaciente.materno = "";
+        oPaciente.ci = "";
+        oPaciente.ci_exp = "";
+        oPaciente.fecha_nac = "";
+        oPaciente.dir = "";
+        oPaciente.fono = "";
+        oPaciente.foto = "";
+        oPaciente.nombre_proge = "";
+        oPaciente.senior = "";
+        oPaciente.dir_s = "";
+        oPaciente.fono_dom_s = "";
+        oPaciente.fono_trab_s = "";
+        oPaciente.cel_s = "";
+        oPaciente.fax_s = "";
+        oPaciente.correo_s = "";
+        oPaciente.agradecer = "";
+        oPaciente.nom_edad_hmnos = "";
+        oPaciente.consultas = [];
+        oPaciente.eliminados = [];
+        oPaciente._method = "POST";
     };
 
     onMounted(() => {});

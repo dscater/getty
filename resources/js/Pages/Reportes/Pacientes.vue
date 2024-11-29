@@ -89,7 +89,7 @@ onMounted(async () => {
                                         v-for="item in listPacientes"
                                         :value="item.id"
                                     >
-                                        {{ item.full_name }}
+                                        {{ item.full_name }} - {{ item.ci?item.ci:'S/N' }}
                                     </option>
                                 </select>
                             </div>
