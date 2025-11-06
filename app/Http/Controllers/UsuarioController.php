@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consulta;
 use App\Models\HistorialAccion;
+use App\Models\Paciente;
 use App\Models\User;
 use App\Models\VentaLote;
 use Illuminate\Http\Request;
@@ -259,10 +261,22 @@ class UsuarioController extends Controller
     {
         DB::beginTransaction();
         try {
-            $usos = VentaLote::where("user_id", $user->id)->get();
+            $usos = Paciente::where("user_id", $user->id)->get();
             if (count($usos) > 0) {
                 throw ValidationException::withMessages([
-                    'error' =>  "No es posible eliminar este registro porque esta siendo utilizado por otros registros",
+                    'error' =>  "No es posible eliminar este registro porque realizó el registro de pacientes",
+                ]);
+            }
+            $usos = Consulta::where("general_id", $user->id)->get();
+            if (count($usos) > 0) {
+                throw ValidationException::withMessages([
+                    'error' =>  "No es posible eliminar este registro porque esta registrado como Doctor General",
+                ]);
+            }
+            $usos = Consulta::where("especialista_id", $user->id)->get();
+            if (count($usos) > 0) {
+                throw ValidationException::withMessages([
+                    'error' =>  "No es posible eliminar este registro porque esta registrado como Doctor Especialista",
                 ]);
             }
 

@@ -326,6 +326,13 @@ class PacienteController extends Controller
                     'error' =>  "No es posible eliminar este registro porque esta siendo utilizado por otros registros",
                 ]);
             }
+            // $usos = Consulta::where("paciente_id", $paciente->id)->get();
+            // if (count($usos) > 0) {
+            //     throw ValidationException::withMessages([
+            //         'error' =>  "No es posible eliminar este registro porque esta siendo utilizado por otros registros",
+            //     ]);
+            // }
+            $paciente->consultas()->delete();
 
             $antiguo = $paciente->foto;
             if ($antiguo != 'default.png') {

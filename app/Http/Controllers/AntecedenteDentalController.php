@@ -144,7 +144,7 @@ class AntecedenteDentalController extends Controller
         DB::beginTransaction();
         try {
             $datos_original = HistorialAccion::getDetalleRegistro($antecedente_dental, "antecedente_dentals");
-            $antecedente_dental->update(array_map('mb_strtoupper', $request->all()));
+            $antecedente_dental->update(array_map('mb_strtoupper', $request->except(["paciente"])));
 
             $datos_nuevo = HistorialAccion::getDetalleRegistro($antecedente_dental, "antecedente_dentals");
             HistorialAccion::create([
